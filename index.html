@@ -1,0 +1,2148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Analyzer Pro - Интерактивный спортивный аналитик</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1e88e5;
+            --primary-dark: #0d47a1;
+            --secondary: #00c853;
+            --accent: #ff6b6b;
+            --warning: #ff9800;
+            --success: #4caf50;
+            --light-bg: #f5f7fa;
+            --dark-bg: #1a237e;
+            --card-bg: #ffffff;
+            --text: #263238;
+            --text-light: #546e7a;
+            --border: #e0e0e0;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            min-height: 90vh;
+        }
+
+        .header {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        .header i {
+            font-size: 28px;
+            background: rgba(255,255,255,0.2);
+            padding: 10px;
+            border-radius: 50%;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .header .subtitle {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .user-info {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .user-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .main-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-height: 70vh;
+        }
+
+        /* Компоненты */
+        .welcome-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: var(--radius);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .welcome-message {
+            background: linear-gradient(to right, #e8f5e9, #c8e6c9);
+            padding: 25px;
+            border-radius: var(--radius);
+            border-left: 5px solid var(--secondary);
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: var(--radius);
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            color: #856404;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border-left: 5px solid #28a745;
+            color: #155724;
+        }
+
+        .sport-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .sport-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid transparent;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sport-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border-color: var(--primary);
+        }
+
+        .sport-card i {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .sport-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .menu-btn {
+            background: white;
+            border: none;
+            padding: 25px;
+            border-radius: var(--radius);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+            position: relative;
+        }
+
+        .menu-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .menu-btn:hover i {
+            color: white;
+        }
+
+        .menu-btn i {
+            font-size: 32px;
+            color: var(--primary);
+        }
+
+        /* Тест характеристик */
+        .test-container {
+            background: white;
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin: 20px 0;
+        }
+
+        .test-step {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: var(--radius);
+            margin: 15px 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .input-group {
+            margin: 20px 0;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .input-field:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .range-container {
+            margin: 30px 0;
+        }
+
+        .range-slider {
+            width: 100%;
+            height: 10px;
+            -webkit-appearance: none;
+            background: linear-gradient(to right, #ff6b6b, #ffd166, #06d6a0);
+            border-radius: 5px;
+            outline: none;
+            margin: 20px 0;
+        }
+
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 28px;
+            height: 28px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .range-value {
+            font-size: 36px;
+            font-weight: bold;
+            text-align: center;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-light);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .option-btn {
+            padding: 20px;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background: #f0f7ff;
+        }
+
+        .option-btn.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Игра в реакции */
+        .reaction-game {
+            background: #1a237e;
+            color: white;
+            padding: 30px;
+            border-radius: var(--radius);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .reaction-target {
+            width: 100px;
+            height: 100px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            margin: 30px auto;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        .reaction-target:hover {
+            transform: scale(1.1);
+        }
+
+        .reaction-timer {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .reaction-results {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: var(--radius);
+            margin: 20px 0;
+        }
+
+        /* Мини-игры */
+        .mini-game {
+            background: white;
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .checkers-board {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 0;
+            width: 320px;
+            height: 320px;
+            margin: 20px auto;
+            border: 3px solid #333;
+        }
+
+        .checkers-cell {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .checkers-cell.light {
+            background: #f0d9b5;
+        }
+
+        .checkers-cell.dark {
+            background: #b58863;
+        }
+
+        .checkers-piece {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .checkers-piece.black {
+            background: #000;
+            border: 2px solid #333;
+        }
+
+        .checkers-piece.white {
+            background: #fff;
+            border: 2px solid #ccc;
+        }
+
+        /* Результаты и аналитика */
+        .results-container {
+            background: white;
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin: 20px 0;
+        }
+
+        .analysis-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: var(--radius);
+            margin: 15px 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--primary);
+        }
+
+        .progress-container {
+            margin: 15px 0;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: var(--light-bg);
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            border-radius: 5px;
+            transition: width 1s ease;
+        }
+
+        /* Навигация */
+        .navigation {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--light-bg);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-accent:hover {
+            background: #ff4757;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #f57c00;
+        }
+
+        /* Таблицы */
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .results-table th, .results-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .results-table th {
+            background: #f5f5f5;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .results-table tr:hover {
+            background: #f9f9f9;
+        }
+
+        /* Визуализация */
+        .visualization {
+            background: white;
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .radar-chart {
+            width: 100%;
+            max-width: 500px;
+            height: 300px;
+            margin: 0 auto;
+        }
+
+        /* Утилиты */
+        .hidden {
+            display: none !important;
+        }
+
+        .page {
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-light);
+            font-size: 14px;
+            border-top: 1px solid var(--border);
+            margin-top: 20px;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 0;
+                min-height: 100vh;
+            }
+            
+            body {
+                padding: 0;
+            }
+            
+            .sport-cards, .menu-grid, .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .user-info {
+                position: static;
+                margin-top: 15px;
+                justify-content: center;
+            }
+            
+            .checkers-board {
+                width: 240px;
+                height: 240px;
+            }
+            
+            .checkers-cell {
+                width: 30px;
+                height: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="penguin-icon">
+                <i class="fas fa-running"></i>
+            </div>
+            <div>
+                <h1>Sports Analyzer Pro</h1>
+                <div class="subtitle">Интерактивный анализ спортивных возможностей</div>
+            </div>
+            
+            <div class="user-info">
+                <div class="user-badge">
+                    <i class="fas fa-user"></i>
+                    <span id="user-name">Аналитик</span>
+                </div>
+                <div class="user-badge">
+                    <i class="fas fa-chart-line"></i>
+                    <span id="user-score">Не оценен</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Главная страница -->
+            <div id="page-welcome" class="page">
+                <div class="welcome-banner">
+                    <h1><i class="fas fa-bullseye"></i> Добро пожаловать в Sports Analyzer Pro!</h1>
+                    <p>Профессиональный анализ ваших спортивных возможностей через интерактивные тесты</p>
+                </div>
+
+                <div id="initial-test-alert" class="alert alert-warning">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <div>
+                        <strong>Для начала работы необходимо пройти комплексный тест</strong>
+                        <p>Это займет 10-15 минут, но даст точные рекомендации</p>
+                    </div>
+                </div>
+
+                <div class="welcome-message">
+                    <h2><i class="fas fa-flask"></i> Как это работает?</h2>
+                    <p>Наш алгоритм анализирует вас через:</p>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i class="fas fa-stopwatch" style="font-size: 32px; color: var(--primary);"></i>
+                            <h3>Физические тесты</h3>
+                            <p>Замеры времени, реакции, координации</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-brain" style="font-size: 32px; color: var(--primary);"></i>
+                            <h3>Когнитивные тесты</h3>
+                            <p>Стратегия, логика, принятие решений</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-gamepad" style="font-size: 32px; color: var(--primary);"></i>
+                            <h3>Мини-игры</h3>
+                            <p>Оценка реакции и координации в игровой форме</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-grid">
+                    <div class="menu-btn" onclick="startComprehensiveTest()">
+                        <i class="fas fa-play-circle"></i>
+                        <span>Начать полный анализ</span>
+                        <div class="sport-badge">🚀</div>
+                    </div>
+                    
+                    <div class="menu-btn" onclick="showMyResults()">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Мои результаты</span>
+                        <div class="sport-badge">📊</div>
+                    </div>
+                    
+                    <div class="menu-btn" onclick="showSportsSelection()">
+                        <i class="fas fa-futbol"></i>
+                        <span>Анализ по виду спорта</span>
+                        <div class="sport-badge">🎯</div>
+                    </div>
+                    
+                    <div class="menu-btn" onclick="showMiniGames()">
+                        <i class="fas fa-gamepad"></i>
+                        <span>Тренировочные игры</span>
+                        <div class="sport-badge">🎮</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Выбор спорта -->
+            <div id="page-sports" class="page hidden">
+                <div class="welcome-message">
+                    <h2><i class="fas fa-futbol"></i> Выберите вид спорта для анализа</h2>
+                    <p>Мы подберем оптимальную позицию и дадим рекомендации по развитию</p>
+                </div>
+
+                <div class="sport-cards">
+                    <div class="sport-card" onclick="selectSport('football')">
+                        <i class="fas fa-futbol"></i>
+                        <div class="sport-badge">⚽</div>
+                        <h3>Футбол</h3>
+                        <p>8 позиций, анализ скорости, выносливости, техники</p>
+                    </div>
+                    
+                    <div class="sport-card" onclick="selectSport('basketball')">
+                        <i class="fas fa-basketball-ball"></i>
+                        <div class="sport-badge">🏀</div>
+                        <h3>Баскетбол</h3>
+                        <p>5 позиций, анализ прыгучести, точности, скорости</p>
+                    </div>
+                    
+                    <div class="sport-card" onclick="selectSport('volleyball')">
+                        <i class="fas fa-volleyball-ball"></i>
+                        <div class="sport-badge">🏐</div>
+                        <h3>Волейбол</h3>
+                        <p>6 позиций, анализ реакции, прыгучести, координации</p>
+                    </div>
+                    
+                    <div class="sport-card" onclick="selectSport('tennis')">
+                        <i class="fas fa-table-tennis"></i>
+                        <div class="sport-badge">🎾</div>
+                        <h3>Теннис</h3>
+                        <p>4 стиля игры, анализ реакции, выносливости, тактики</p>
+                    </div>
+                    
+                    <div class="sport-card" onclick="selectSport('hockey')">
+                        <i class="fas fa-hockey-puck"></i>
+                        <div class="sport-badge">🏒</div>
+                        <h3>Хоккей</h3>
+                        <p>4 амплуа, анализ скорости, силы, реакции</p>
+                    </div>
+                    
+                    <div class="sport-card" onclick="selectSport('swimming')">
+                        <i class="fas fa-swimmer"></i>
+                        <div class="sport-badge">🏊</div>
+                        <h3>Плавание</h3>
+                        <p>4 стиля, анализ выносливости, техники, дыхания</p>
+                    </div>
+                </div>
+
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="backToWelcome()">
+                        <i class="fas fa-arrow-left"></i> Назад
+                    </button>
+                </div>
+            </div>
+
+            <!-- Комплексный тест -->
+            <div id="page-comprehensive-test" class="page hidden">
+                <div class="test-container">
+                    <h2 id="test-title"><i class="fas fa-clipboard-list"></i> Комплексный спортивный тест</h2>
+                    <div id="test-progress" style="margin: 10px 0; color: var(--text-light);"></div>
+                    
+                    <!-- Шаг 1: Основные данные -->
+                    <div id="test-step-1" class="test-step">
+                        <h3><i class="fas fa-user"></i> Шаг 1: Основные данные</h3>
+                        <div class="input-group">
+                            <label class="input-label">Ваше имя:</label>
+                            <input type="text" class="input-field" id="user-name-input" placeholder="Введите ваше имя">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Возраст:</label>
+                            <input type="number" class="input-field" id="user-age" min="10" max="70" placeholder="Введите ваш возраст">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Рост (см):</label>
+                            <input type="number" class="input-field" id="user-height" min="100" max="220" placeholder="Например: 180">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Вес (кг):</label>
+                            <input type="number" class="input-field" id="user-weight" min="30" max="150" placeholder="Например: 75">
+                        </div>
+                    </div>
+
+                    <!-- Шаг 2: Физические показатели -->
+                    <div id="test-step-2" class="test-step hidden">
+                        <h3><i class="fas fa-running"></i> Шаг 2: Физические показатели</h3>
+                        <p>Пожалуйста, будьте честны в ответах для точного анализа</p>
+                        
+                        <div class="input-group">
+                            <label class="input-label">Время на 100 метров (секунды):</label>
+                            <input type="number" class="input-field" id="speed-100m" min="10" max="30" step="0.1" placeholder="Например: 14.5">
+                            <small style="color: var(--text-light);">Укажите ваш лучший результат</small>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label">Максимальное количество отжиманий:</label>
+                            <input type="number" class="input-field" id="pushups-max" min="0" max="100" placeholder="Например: 25">
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label">Максимальное количество приседаний:</label>
+                            <input type="number" class="input-field" id="squats-max" min="0" max="200" placeholder="Например: 50">
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label">Максимальное время планки (секунды):</label>
+                            <input type="number" class="input-field" id="plank-time" min="0" max="600" placeholder="Например: 120">
+                        </div>
+                    </div>
+
+                    <!-- Шаг 3: Спортивные предпочтения -->
+                    <div id="test-step-3" class="test-step hidden">
+                        <h3><i class="fas fa-heart"></i> Шаг 3: Спортивные предпочтения</h3>
+                        <p>Какие виды спорта вам нравятся больше всего?</p>
+                        
+                        <div class="options-grid">
+                            <div class="option-btn" onclick="toggleOption(this, 'football')">⚽ Футбол</div>
+                            <div class="option-btn" onclick="toggleOption(this, 'basketball')">🏀 Баскетбол</div>
+                            <div class="option-btn" onclick="toggleOption(this, 'volleyball')">🏐 Волейбол</div>
+                            <div class="option-btn" onclick="toggleOption(this, 'tennis')">🎾 Теннис</div>
+                            <div class="option-btn" onclick="toggleOption(this, 'hockey')">🏒 Хоккей</div>
+                            <div class="option-btn" onclick="toggleOption(this, 'swimming')">🏊 Плавание</div>
+                            <div class="option-btn" onclick="toggleOption(this, 'athletics')">🏃 Легкая атлетика</div>
+                            <div class="option-btn" onclick="toggleOption(this, 'martial')">🥋 Единоборства</div>
+                        </div>
+                    </div>
+
+                    <!-- Шаг 4: Тест на реакцию -->
+                    <div id="test-step-4" class="test-step hidden">
+                        <h3><i class="fas fa-bolt"></i> Шаг 4: Тест реакции</h3>
+                        <p>Кликайте на красный круг как только он появится</p>
+                        
+                        <div class="reaction-game">
+                            <div id="reaction-start" class="btn btn-primary" onclick="startReactionTest()">
+                                <i class="fas fa-play"></i> Начать тест реакции
+                            </div>
+                            
+                            <div id="reaction-target" class="reaction-target hidden" onclick="recordReactionTime()">
+                                ЖМИ!
+                            </div>
+                            
+                            <div id="reaction-timer" class="reaction-timer hidden">0.000</div>
+                            
+                            <div id="reaction-results" class="reaction-results hidden">
+                                <h4>Результаты:</h4>
+                                <div id="reaction-times"></div>
+                                <div>Среднее время: <span id="avg-reaction">0</span> мс</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Шаг 5: Координация (упрощенные шашки) -->
+                    <div id="test-step-5" class="test-step hidden">
+                        <h3><i class="fas fa-chess-board"></i> Шаг 5: Тест координации</h3>
+                        <p>Сделайте 5 ходов в упрощенных шашках</p>
+                        
+                        <div class="mini-game">
+                            <div class="checkers-board" id="checkers-board">
+                                <!-- Доска будет сгенерирована через JS -->
+                            </div>
+                            <div id="checkers-info" style="margin: 15px 0;">
+                                <div>Ход: <span id="checkers-turn">Белых</span></div>
+                                <div>Сделано ходов: <span id="moves-count">0</span>/5</div>
+                            </div>
+                            <button class="btn btn-secondary" onclick="resetCheckers()">
+                                <i class="fas fa-redo"></i> Начать заново
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Шаг 6: Тактическое мышление -->
+                    <div id="test-step-6" class="test-step hidden">
+                        <h3><i class="fas fa-chess"></i> Шаг 6: Тактическое мышление</h3>
+                        <p>Решите 3 спортивные задачи</p>
+                        
+                        <div class="options-grid">
+                            <div class="option-btn" onclick="selectTacticAnswer(1)">
+                                Футбол: Ваша команда ведет 1:0 за 5 минут до конца. Ваши действия?
+                            </div>
+                            <div class="option-btn" onclick="selectTacticAnswer(2)">
+                                Баскетбол: Проигрываете 2 очка, осталось 10 секунд. У вас мяч.
+                            </div>
+                            <div class="option-btn" onclick="selectTacticAnswer(3)">
+                                Волейбол: Соперник сильнее в атаке, но слабее в защите. Ваша тактика?
+                            </div>
+                        </div>
+                        
+                        <div id="tactic-feedback" class="hidden" style="margin-top: 20px; padding: 15px; background: #e8f5e9; border-radius: var(--radius);">
+                            <h4><i class="fas fa-lightbulb"></i> Анализ вашего выбора:</h4>
+                            <div id="tactic-analysis"></div>
+                        </div>
+                    </div>
+
+                    <!-- Шаг 7: Психологические характеристики -->
+                    <div id="test-step-7" class="test-step hidden">
+                        <h3><i class="fas fa-brain"></i> Шаг 7: Психологический портрет</h3>
+                        <p>Оцените себя по шкале от 1 до 10</p>
+                        
+                        <div class="range-container">
+                            <div class="input-label">Лидерские качества</div>
+                            <input type="range" min="1" max="10" value="5" class="range-slider" id="leadership-slider" oninput="updateRangeValue('leadership')">
+                            <div class="range-value" id="leadership-value">5</div>
+                            <div class="range-labels">
+                                <span>Следователь</span>
+                                <span>Лидер</span>
+                            </div>
+                        </div>
+
+                        <div class="range-container">
+                            <div class="input-label">Стрессоустойчивость</div>
+                            <input type="range" min="1" max="10" value="5" class="range-slider" id="stress-slider" oninput="updateRangeValue('stress')">
+                            <div class="range-value" id="stress-value">5</div>
+                            <div class="range-labels">
+                                <span>Теряюсь</span>
+                                <span>Хладнокровен</span>
+                            </div>
+                        </div>
+
+                        <div class="range-container">
+                            <div class="input-label">Командность</div>
+                            <input type="range" min="1" max="10" value="5" class="range-slider" id="teamwork-slider" oninput="updateRangeValue('teamwork')">
+                            <div class="range-value" id="teamwork-value">5</div>
+                            <div class="range-labels">
+                                <span>Индивидуалист</span>
+                                <span>Командный игрок</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="prevTestStep()" id="prev-btn">
+                        <i class="fas fa-arrow-left"></i> Назад
+                    </button>
+                    <button class="btn btn-primary" onclick="nextTestStep()" id="next-btn">
+                        <i class="fas fa-arrow-right"></i> Далее
+                    </button>
+                </div>
+            </div>
+
+            <!-- Результаты анализа -->
+            <div id="page-results" class="page hidden">
+                <div class="results-container">
+                    <h2><i class="fas fa-trophy"></i> Результаты комплексного анализа</h2>
+                    
+                    <div class="analysis-card">
+                        <h3><i class="fas fa-user-circle"></i> Профиль спортсмена</h3>
+                        <div id="athlete-profile"></div>
+                    </div>
+
+                    <div class="analysis-card">
+                        <h3><i class="fas fa-chart-line"></i> Физические показатели</h3>
+                        <div id="physical-stats"></div>
+                    </div>
+
+                    <div class="analysis-card">
+                        <h3><i class="fas fa-chess"></i> Психологический портрет</h3>
+                        <div id="psychological-profile"></div>
+                    </div>
+
+                    <div class="analysis-card">
+                        <h3><i class="fas fa-medal"></i> Рекомендуемые виды спорта</h3>
+                        <div id="sport-recommendations"></div>
+                    </div>
+
+                    <div class="analysis-card">
+                        <h3><i class="fas fa-bullseye"></i> Идеальные позиции</h3>
+                        <div id="position-recommendations"></div>
+                    </div>
+
+                    <div class="analysis-card">
+                        <h3><i class="fas fa-dumbbell"></i> Рекомендации по развитию</h3>
+                        <div id="development-plan"></div>
+                    </div>
+                </div>
+
+                <div class="navigation">
+                    <button class="btn btn-primary" onclick="saveResults()">
+                        <i class="fas fa-save"></i> Сохранить результаты
+                    </button>
+                    <button class="btn btn-warning" onclick="restartTest()">
+                        <i class="fas fa-redo"></i> Пройти тест заново
+                    </button>
+                    <button class="btn btn-secondary" onclick="backToWelcome()">
+                        <i class="fas fa-home"></i> На главную
+                    </button>
+                </div>
+            </div>
+
+            <!-- Мини-игры -->
+            <div id="page-mini-games" class="page hidden">
+                <div class="welcome-message">
+                    <h2><i class="fas fa-gamepad"></i> Тренировочные игры</h2>
+                    <p>Развивайте спортивные навыки через игры!</p>
+                </div>
+
+                <div class="sport-cards">
+                    <div class="sport-card" onclick="startReactionGame()">
+                        <i class="fas fa-bolt"></i>
+                        <div class="sport-badge">⚡</div>
+                        <h3>Тренировка реакции</h3>
+                        <p>Кликайте по появляющимся целям</p>
+                    </div>
+                    
+                    <div class="sport-card" onclick="startCoordinationGame()">
+                        <i class="fas fa-crosshairs"></i>
+                        <div class="sport-badge">🎯</div>
+                        <h3>Координация</h3>
+                        <p>Попадайте в движущиеся цели</p>
+                    </div>
+                    
+                    <div class="sport-card" onclick="startMemoryGame()">
+                        <i class="fas fa-brain"></i>
+                        <div class="sport-badge">🧠</div>
+                        <h3>Спортивная память</h3>
+                        <p>Запоминайте последовательности</p>
+                    </div>
+                    
+                    <div class="sport-card" onclick="startStrategyGame()">
+                        <i class="fas fa-chess"></i>
+                        <div class="sport-badge">♟️</div>
+                        <h3>Тактическое мышление</h3>
+                        <p>Решайте спортивные задачи</p>
+                    </div>
+                </div>
+
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="backToWelcome()">
+                        <i class="fas fa-arrow-left"></i> Назад
+                    </button>
+                </div>
+            </div>
+
+            <!-- Мои результаты -->
+            <div id="page-my-results" class="page hidden">
+                <div class="results-container">
+                    <h2><i class="fas fa-history"></i> История моих тестов</h2>
+                    
+                    <div id="results-history">
+                        <!-- Результаты будут загружены динамически -->
+                    </div>
+                </div>
+
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="backToWelcome()">
+                        <i class="fas fa-arrow-left"></i> Назад
+                    </button>
+                    <button class="btn btn-primary" onclick="startComprehensiveTest()">
+                        <i class="fas fa-redo"></i> Пройти новый тест
+                    </button>
+                </div>
+            </div>
+
+            <!-- Анализ по виду спорта -->
+            <div id="page-sport-analysis" class="page hidden">
+                <div class="results-container">
+                    <h2 id="sport-analysis-title"><i class="fas fa-chart-pie"></i> Анализ для выбранного спорта</h2>
+                    
+                    <div id="sport-analysis-content">
+                        <!-- Анализ будет загружен динамически -->
+                    </div>
+                </div>
+
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="backToWelcome()">
+                        <i class="fas fa-arrow-left"></i> Назад
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Sports Analyzer Pro © 2024 | Интерактивная система анализа спортивных возможностей</p>
+            <p style="margin-top: 5px; font-size: 12px;">Все данные хранятся локально в вашем браузере</p>
+        </div>
+    </div>
+
+    <script>
+        // Основные данные
+        const SPORTS_DATA = {
+            football: {
+                name: "⚽ Футбол",
+                positions: [
+                    { name: "Вратарь", requirements: { reaction: 9, jump: 8, strength: 7, leadership: 8 } },
+                    { name: "Центральный защитник", requirements: { strength: 9, heading: 8, positioning: 8 } },
+                    { name: "Крайний защитник", requirements: { speed: 8, stamina: 8, crossing: 7 } },
+                    { name: "Опорный полузащитник", requirements: { stamina: 9, tackling: 8, passing: 7 } },
+                    { name: "Центральный полузащитник", requirements: { passing: 9, vision: 8, dribbling: 7 } },
+                    { name: "Крайний нападающий", requirements: { speed: 9, dribbling: 8, finishing: 7 } },
+                    { name: "Нападающий", requirements: { finishing: 9, strength: 7, positioning: 8 } }
+                ]
+            },
+            basketball: {
+                name: "🏀 Баскетбол",
+                positions: [
+                    { name: "Разыгрывающий", requirements: { passing: 9, vision: 8, dribbling: 8 } },
+                    { name: "Атакующий защитник", requirements: { shooting: 9, speed: 8, dribbling: 7 } },
+                    { name: "Легкий форвард", requirements: { versatility: 8, shooting: 7, rebounding: 7 } },
+                    { name: "Тяжелый форвард", requirements: { strength: 8, rebounding: 9, insideScoring: 8 } },
+                    { name: "Центровой", requirements: { height: 9, rebounding: 9, blocking: 8 } }
+                ]
+            },
+            volleyball: {
+                name: "🏐 Волейбол",
+                positions: [
+                    { name: "Либеро", requirements: { defense: 9, reaction: 8, passing: 8 } },
+                    { name: "Связующий", requirements: { passing: 9, vision: 8, leadership: 7 } },
+                    { name: "Доигровщик", requirements: { attack: 8, versatility: 8, jumping: 7 } },
+                    { name: "Диагональный", requirements: { attack: 9, power: 8, jumping: 8 } },
+                    { name: "Центральный блокирующий", requirements: { blocking: 9, height: 8, quickness: 7 } }
+                ]
+            }
+        };
+
+        // Состояние приложения
+        let currentState = {
+            currentStep: 1,
+            totalSteps: 7,
+            testData: {
+                personal: {},
+                physical: {},
+                preferences: [],
+                reaction: [],
+                coordination: 0,
+                tactical: [],
+                psychological: {}
+            },
+            currentGame: null,
+            testHistory: []
+        };
+
+        // Инициализация
+        function initApp() {
+            loadFromStorage();
+            updateUserDisplay();
+            
+            // Проверить, есть ли сохраненные результаты
+            const savedResults = localStorage.getItem('sportsAnalyzerResults');
+            if (!savedResults) {
+                document.getElementById('initial-test-alert').classList.remove('hidden');
+            } else {
+                document.getElementById('initial-test-alert').classList.add('hidden');
+            }
+        }
+
+        function loadFromStorage() {
+            const savedData = localStorage.getItem('sportsAnalyzerData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                currentState.testHistory = data.testHistory || [];
+                
+                if (data.lastTest) {
+                    document.getElementById('user-score').textContent = 
+                        `${data.lastTest.overallScore || 0}/100`;
+                }
+            }
+        }
+
+        function updateUserDisplay() {
+            const name = localStorage.getItem('userName') || 'Аналитик';
+            document.getElementById('user-name').textContent = name;
+        }
+
+        // Навигация по страницам
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.add('hidden');
+            });
+            document.getElementById(pageId).classList.remove('hidden');
+        }
+
+        function backToWelcome() {
+            showPage('page-welcome');
+        }
+
+        function showSportsSelection() {
+            showPage('page-sports');
+        }
+
+        function showMiniGames() {
+            showPage('page-mini-games');
+        }
+
+        function showMyResults() {
+            showPage('page-my-results');
+            displayTestHistory();
+        }
+
+        // Комплексный тест
+        function startComprehensiveTest() {
+            currentState.currentStep = 1;
+            currentState.testData = {
+                personal: {},
+                physical: {},
+                preferences: [],
+                reaction: [],
+                coordination: 0,
+                tactical: [],
+                psychological: {}
+            };
+            
+            updateTestProgress();
+            showPage('page-comprehensive-test');
+            showTestStep(1);
+        }
+
+        function showTestStep(step) {
+            // Скрыть все шаги
+            for (let i = 1; i <= 7; i++) {
+                document.getElementById(`test-step-${i}`).classList.add('hidden');
+            }
+            
+            // Показать нужный шаг
+            document.getElementById(`test-step-${step}`).classList.remove('hidden');
+            
+            // Обновить прогресс
+            updateTestProgress();
+            
+            // Обновить кнопки навигации
+            document.getElementById('prev-btn').style.display = step > 1 ? 'flex' : 'none';
+            
+            if (step === 7) {
+                document.getElementById('next-btn').innerHTML = '<i class="fas fa-check"></i> Завершить тест';
+                document.getElementById('next-btn').onclick = finishTest;
+            } else {
+                document.getElementById('next-btn').innerHTML = '<i class="fas fa-arrow-right"></i> Далее';
+                document.getElementById('next-btn').onclick = nextTestStep;
+            }
+        }
+
+        function updateTestProgress() {
+            const progress = `Шаг ${currentState.currentStep} из ${currentState.totalSteps}`;
+            document.getElementById('test-progress').textContent = progress;
+        }
+
+        function nextTestStep() {
+            // Сохранить данные текущего шага
+            saveCurrentStepData();
+            
+            if (currentState.currentStep < currentState.totalSteps) {
+                currentState.currentStep++;
+                showTestStep(currentState.currentStep);
+            }
+        }
+
+        function prevTestStep() {
+            if (currentState.currentStep > 1) {
+                currentState.currentStep--;
+                showTestStep(currentState.currentStep);
+            }
+        }
+
+        function saveCurrentStepData() {
+            switch(currentState.currentStep) {
+                case 1:
+                    currentState.testData.personal = {
+                        name: document.getElementById('user-name-input').value,
+                        age: parseInt(document.getElementById('user-age').value) || 0,
+                        height: parseInt(document.getElementById('user-height').value) || 0,
+                        weight: parseInt(document.getElementById('user-weight').value) || 0
+                    };
+                    break;
+                case 2:
+                    currentState.testData.physical = {
+                        speed100m: parseFloat(document.getElementById('speed-100m').value) || 0,
+                        pushups: parseInt(document.getElementById('pushups-max').value) || 0,
+                        squats: parseInt(document.getElementById('squats-max').value) || 0,
+                        plank: parseInt(document.getElementById('plank-time').value) || 0
+                    };
+                    break;
+                case 7:
+                    currentState.testData.psychological = {
+                        leadership: parseInt(document.getElementById('leadership-value').textContent),
+                        stress: parseInt(document.getElementById('stress-value').textContent),
+                        teamwork: parseInt(document.getElementById('teamwork-value').textContent)
+                    };
+                    break;
+            }
+        }
+
+        // Функции для теста
+        function toggleOption(button, value) {
+            button.classList.toggle('selected');
+            
+            if (button.classList.contains('selected')) {
+                if (!currentState.testData.preferences.includes(value)) {
+                    currentState.testData.preferences.push(value);
+                }
+            } else {
+                const index = currentState.testData.preferences.indexOf(value);
+                if (index > -1) {
+                    currentState.testData.preferences.splice(index, 1);
+                }
+            }
+        }
+
+        function updateRangeValue(type) {
+            const slider = document.getElementById(`${type}-slider`);
+            const valueDisplay = document.getElementById(`${type}-value`);
+            valueDisplay.textContent = slider.value;
+        }
+
+        // Тест реакции
+        let reactionTest = {
+            startTime: null,
+            times: [],
+            testCount: 0,
+            maxTests: 5
+        };
+
+        function startReactionTest() {
+            document.getElementById('reaction-start').classList.add('hidden');
+            document.getElementById('reaction-results').classList.add('hidden');
+            reactionTest.times = [];
+            reactionTest.testCount = 0;
+            
+            startReactionRound();
+        }
+
+        function startReactionRound() {
+            if (reactionTest.testCount >= reactionTest.maxTests) {
+                finishReactionTest();
+                return;
+            }
+            
+            // Скрыть цель
+            document.getElementById('reaction-target').classList.add('hidden');
+            document.getElementById('reaction-timer').classList.add('hidden');
+            
+            // Случайная задержка 1-3 секунды
+            const delay = 1000 + Math.random() * 2000;
+            
+            setTimeout(() => {
+                reactionTest.startTime = Date.now();
+                document.getElementById('reaction-target').classList.remove('hidden');
+            }, delay);
+        }
+
+        function recordReactionTime() {
+            if (!reactionTest.startTime) return;
+            
+            const reactionTime = Date.now() - reactionTest.startTime;
+            reactionTest.times.push(reactionTime);
+            reactionTest.testCount++;
+            
+            // Показать время
+            document.getElementById('reaction-timer').textContent = (reactionTime / 1000).toFixed(3);
+            document.getElementById('reaction-timer').classList.remove('hidden');
+            
+            // Обновить результаты
+            updateReactionResults();
+            
+            // Следующий раунд через 1 секунду
+            setTimeout(startReactionRound, 1000);
+        }
+
+        function updateReactionResults() {
+            const resultsDiv = document.getElementById('reaction-times');
+            resultsDiv.innerHTML = '';
+            
+            reactionTest.times.forEach((time, index) => {
+                resultsDiv.innerHTML += `<div>Попытка ${index + 1}: ${time} мс</div>`;
+            });
+            
+            if (reactionTest.times.length > 0) {
+                const avg = reactionTest.times.reduce((a, b) => a + b, 0) / reactionTest.times.length;
+                document.getElementById('avg-reaction').textContent = avg.toFixed(0);
+            }
+        }
+
+        function finishReactionTest() {
+            document.getElementById('reaction-target').classList.add('hidden');
+            document.getElementById('reaction-timer').classList.add('hidden');
+            document.getElementById('reaction-results').classList.remove('hidden');
+            document.getElementById('reaction-start').classList.remove('hidden');
+            
+            // Сохранить среднее время
+            if (reactionTest.times.length > 0) {
+                const avg = reactionTest.times.reduce((a, b) => a + b, 0) / reactionTest.times.length;
+                currentState.testData.reaction = reactionTest.times;
+            }
+        }
+
+        // Игра в шашки (упрощенная)
+        let checkersGame = {
+            board: [],
+            currentPlayer: 'white',
+            moves: 0,
+            selectedPiece: null
+        };
+
+        function initCheckers() {
+            const board = document.getElementById('checkers-board');
+            board.innerHTML = '';
+            
+            // Создаем доску 8x8
+            for (let row = 0; row < 8; row++) {
+                for (let col = 0; col < 8; col++) {
+                    const cell = document.createElement('div');
+                    cell.className = `checkers-cell ${(row + col) % 2 === 0 ? 'light' : 'dark'}`;
+                    cell.dataset.row = row;
+                    cell.dataset.col = col;
+                    
+                    // Расставляем фигуры на черных клетках первых 3 рядов
+                    if ((row + col) % 2 === 1) {
+                        if (row < 3) {
+                            const piece = document.createElement('div');
+                            piece.className = 'checkers-piece black';
+                            piece.onclick = () => selectPiece(row, col, 'black');
+                            cell.appendChild(piece);
+                        } else if (row > 4) {
+                            const piece = document.createElement('div');
+                            piece.className = 'checkers-piece white';
+                            piece.onclick = () => selectPiece(row, col, 'white');
+                            cell.appendChild(piece);
+                        }
+                    }
+                    
+                    cell.onclick = () => makeMove(row, col);
+                    board.appendChild(cell);
+                }
+            }
+            
+            updateCheckersInfo();
+        }
+
+        function selectPiece(row, col, color) {
+            if (color !== checkersGame.currentPlayer) return;
+            
+            checkersGame.selectedPiece = { row, col, color };
+            
+            // Подсветка выбранной фигуры
+            document.querySelectorAll('.checkers-piece').forEach(piece => {
+                piece.style.boxShadow = '';
+            });
+            
+            const piece = document.querySelector(`.checkers-cell[data-row="${row}"][data-col="${col}"] .checkers-piece`);
+            if (piece) {
+                piece.style.boxShadow = '0 0 10px gold';
+            }
+        }
+
+        function makeMove(row, col) {
+            if (!checkersGame.selectedPiece) return;
+            
+            const { row: fromRow, col: fromCol, color } = checkersGame.selectedPiece;
+            
+            // Проверяем, что ход допустимый (только вперед по диагонали)
+            const rowDiff = row - fromRow;
+            const colDiff = Math.abs(col - fromCol);
+            
+            if (colDiff === 1 && ((color === 'white' && rowDiff === -1) || (color === 'black' && rowDiff === 1))) {
+                // Перемещаем фигуру
+                const fromCell = document.querySelector(`.checkers-cell[data-row="${fromRow}"][data-col="${fromCol}"]`);
+                const toCell = document.querySelector(`.checkers-cell[data-row="${row}"][data-col="${col}"]`);
+                
+                const piece = fromCell.querySelector('.checkers-piece');
+                fromCell.removeChild(piece);
+                toCell.appendChild(piece);
+                
+                checkersGame.moves++;
+                checkersGame.currentPlayer = checkersGame.currentPlayer === 'white' ? 'black' : 'white';
+                checkersGame.selectedPiece = null;
+                
+                updateCheckersInfo();
+                
+                // Если сделано 5 ходов, завершаем
+                if (checkersGame.moves >= 5) {
+                    currentState.testData.coordination = checkersGame.moves;
+                    document.getElementById('next-btn').click();
+                }
+            }
+        }
+
+        function updateCheckersInfo() {
+            document.getElementById('checkers-turn').textContent = 
+                checkersGame.currentPlayer === 'white' ? 'Белых' : 'Черных';
+            document.getElementById('moves-count').textContent = checkersGame.moves;
+        }
+
+        function resetCheckers() {
+            checkersGame.moves = 0;
+            checkersGame.currentPlayer = 'white';
+            checkersGame.selectedPiece = null;
+            initCheckers();
+        }
+
+        // Тактическое мышление
+        function selectTacticAnswer(question) {
+            const analysis = {
+                1: "Правильная тактика - контролировать мяч и время. Агрессивная игра может привести к контратаке.",
+                2: "Оптимально - быстрая атака для точного броска. Не стоит рисковать трехочковым с большой дистанции.",
+                3: "Нужно использовать свою сильную защиту и контратаковать. Не ввязываться в силовую игру у сетки."
+            };
+            
+            document.getElementById('tactic-analysis').innerHTML = analysis[question];
+            document.getElementById('tactic-feedback').classList.remove('hidden');
+            
+            if (!currentState.testData.tactical.includes(question)) {
+                currentState.testData.tactical.push(question);
+            }
+        }
+
+        // Завершение теста и анализ
+        function finishTest() {
+            saveCurrentStepData();
+            calculateResults();
+            showResultsPage();
+        }
+
+        function calculateResults() {
+            const data = currentState.testData;
+            
+            // Рассчитываем баллы по разным категориям
+            const scores = {
+                physical: calculatePhysicalScore(data.physical),
+                reaction: calculateReactionScore(data.reaction),
+                psychological: calculatePsychologicalScore(data.psychological),
+                tactical: data.tactical.length * 10
+            };
+            
+            // Общий балл
+            currentState.testResults = {
+                scores,
+                overallScore: Math.round((scores.physical + scores.reaction + scores.psychological + scores.tactical) / 4),
+                timestamp: new Date().toISOString(),
+                data: data
+            };
+        }
+
+        function calculatePhysicalScore(physical) {
+            let score = 0;
+            
+            // Оценка скорости (100м)
+            if (physical.speed100m > 0) {
+                if (physical.speed100m <= 13) score += 25; // Отлично
+                else if (physical.speed100m <= 16) score += 20; // Хорошо
+                else if (physical.speed100m <= 20) score += 15; // Средне
+                else score += 10; // Ниже среднего
+            }
+            
+            // Оценка силы (отжимания)
+            if (physical.pushups >= 40) score += 25;
+            else if (physical.pushups >= 25) score += 20;
+            else if (physical.pushups >= 15) score += 15;
+            else if (physical.pushups > 0) score += 10;
+            
+            // Оценка выносливости (планка)
+            if (physical.plank >= 180) score += 25;
+            else if (physical.plank >= 120) score += 20;
+            else if (physical.plank >= 60) score += 15;
+            else if (physical.plank > 0) score += 10;
+            
+            return Math.min(score, 100);
+        }
+
+        function calculateReactionScore(reactionTimes) {
+            if (!reactionTimes || reactionTimes.length === 0) return 50;
+            
+            const avg = reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length;
+            
+            if (avg < 200) return 100; // Отлично
+            if (avg < 300) return 80;  // Хорошо
+            if (avg < 400) return 60;  // Средне
+            if (avg < 500) return 40;  // Ниже среднего
+            return 20; // Плохо
+        }
+
+        function calculatePsychologicalScore(psychological) {
+            let score = 0;
+            if (psychological.leadership) score += psychological.leadership * 3;
+            if (psychological.stress) score += psychological.stress * 3;
+            if (psychological.teamwork) score += psychological.teamwork * 4;
+            return Math.min(score, 100);
+        }
+
+        function showResultsPage() {
+            const results = currentState.testResults;
+            const data = currentState.testData;
+            
+            // Профиль спортсмена
+            document.getElementById('athlete-profile').innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h4>${data.personal.name || 'Аноним'}</h4>
+                        <div>Возраст: ${data.personal.age || 'Не указан'}</div>
+                        <div>Рост: ${data.personal.height || 'Не указан'} см</div>
+                        <div>Вес: ${data.personal.weight || 'Не указан'} кг</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Общий балл</h4>
+                        <div style="font-size: 36px; color: var(--primary); font-weight: bold;">
+                            ${results.overallScore}/100
+                        </div>
+                        <div>${getScoreDescription(results.overallScore)}</div>
+                    </div>
+                </div>
+            `;
+            
+            // Физические показатели
+            document.getElementById('physical-stats').innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h4>Скорость</h4>
+                        <div>100м: ${data.physical.speed100m || 'Не тестировалось'} сек</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${calculateSpeedScore(data.physical.speed100m)}%"></div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Сила</h4>
+                        <div>Отжимания: ${data.physical.pushups || 0}</div>
+                        <div>Приседания: ${data.physical.squats || 0}</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${calculateStrengthScore(data.physical.pushups)}%"></div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Выносливость</h4>
+                        <div>Планка: ${data.physical.plank || 0} сек</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${calculateEnduranceScore(data.physical.plank)}%"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Психологический портрет
+            document.getElementById('psychological-profile').innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h4>Лидерство</h4>
+                        <div>${data.psychological.leadership || 5}/10</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${(data.psychological.leadership || 5) * 10}%"></div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Стрессоустойчивость</h4>
+                        <div>${data.psychological.stress || 5}/10</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${(data.psychological.stress || 5) * 10}%"></div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Командность</h4>
+                        <div>${data.psychological.teamwork || 5}/10</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${(data.psychological.teamwork || 5) * 10}%"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Рекомендации по видам спорта
+            const sportRecs = getSportRecommendations(results, data);
+            document.getElementById('sport-recommendations').innerHTML = sportRecs;
+            
+            // Идеальные позиции
+            const posRecs = getPositionRecommendations(data);
+            document.getElementById('position-recommendations').innerHTML = posRecs;
+            
+            // План развития
+            const devPlan = getDevelopmentPlan(results, data);
+            document.getElementById('development-plan').innerHTML = devPlan;
+            
+            showPage('page-results');
+        }
+
+        function getScoreDescription(score) {
+            if (score >= 85) return "Отличный результат! Вы обладаете выдающимися спортивными данными.";
+            if (score >= 70) return "Хороший результат! У вас хороший потенциал для спорта.";
+            if (score >= 50) return "Средний результат. Есть куда расти!";
+            return "Начальный уровень. Регулярные тренировки помогут улучшить результаты.";
+        }
+
+        function calculateSpeedScore(time) {
+            if (!time) return 50;
+            if (time <= 13) return 100;
+            if (time <= 16) return 80;
+            if (time <= 20) return 60;
+            return 40;
+        }
+
+        function calculateStrengthScore(pushups) {
+            if (!pushups) return 50;
+            if (pushups >= 40) return 100;
+            if (pushups >= 25) return 80;
+            if (pushups >= 15) return 60;
+            return 40;
+        }
+
+        function calculateEnduranceScore(plank) {
+            if (!plank) return 50;
+            if (plank >= 180) return 100;
+            if (plank >= 120) return 80;
+            if (plank >= 60) return 60;
+            return 40;
+        }
+
+        function getSportRecommendations(results, data) {
+            const recommendations = [];
+            
+            // Анализируем физические данные
+            const physical = data.physical;
+            const psych = data.psychological;
+            
+            // Футбол
+            if (physical.speed100m <= 16 && psych.teamwork >= 7) {
+                recommendations.push({
+                    sport: "⚽ Футбол",
+                    match: 85 + Math.floor(Math.random() * 15),
+                    reason: "Хорошая скорость и командные качества"
+                });
+            }
+            
+            // Баскетбол
+            if (data.personal.height >= 180 && physical.speed100m <= 17) {
+                recommendations.push({
+                    sport: "🏀 Баскетбол",
+                    match: 80 + Math.floor(Math.random() * 20),
+                    reason: "Подходящий рост и скоростные данные"
+                });
+            }
+            
+            // Волейбол
+            if (data.personal.height >= 185 && psych.reaction >= 7) {
+                recommendations.push({
+                    sport: "🏐 Волейбол",
+                    match: 75 + Math.floor(Math.random() * 25),
+                    reason: "Рост и хорошая реакция"
+                });
+            }
+            
+            // Теннис
+            if (data.testData?.reaction?.length && data.testData.reaction[0] < 300) {
+                recommendations.push({
+                    sport: "🎾 Теннис",
+                    match: 90 + Math.floor(Math.random() * 10),
+                    reason: "Отличная скорость реакции"
+                });
+            }
+            
+            // Если нет специфических рекомендаций, даем общие
+            if (recommendations.length === 0) {
+                recommendations.push(
+                    { sport: "🏃 Легкая атлетика", match: 70, reason: "Универсальная подготовка" },
+                    { sport: "🏊 Плавание", match: 65, reason: "Развивает все группы мышц" },
+                    { sport: "🚴 Велоспорт", match: 60, reason: "Отлично для выносливости" }
+                );
+            }
+            
+            let html = '<div class="stats-grid">';
+            recommendations.forEach(rec => {
+                html += `
+                    <div class="stat-card">
+                        <h4>${rec.sport}</h4>
+                        <div style="font-size: 24px; color: var(--primary); font-weight: bold;">
+                            ${rec.match}%
+                        </div>
+                        <div style="font-size: 12px; color: var(--text-light);">
+                            ${rec.reason}
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            
+            return html;
+        }
+
+        function getPositionRecommendations(data) {
+            const physical = data.physical;
+            const psych = data.psychological;
+            
+            let positions = [];
+            
+            // Для футбола
+            if (physical.speed100m <= 14) {
+                positions.push({ sport: "⚽", position: "Крайний нападающий", reason: "Отличная скорость" });
+            }
+            if (psych.leadership >= 8) {
+                positions.push({ sport: "⚽", position: "Вратарь/Капитан", reason: "Лидерские качества" });
+            }
+            if (physical.plank >= 120) {
+                positions.push({ sport: "⚽", position: "Опорный полузащитник", reason: "Хорошая выносливость" });
+            }
+            
+            // Для баскетбола
+            if (data.personal.height >= 190) {
+                positions.push({ sport: "🏀", position: "Центровой", reason: "Рост" });
+            }
+            if (data.testData?.reaction?.length && data.testData.reaction[0] < 250) {
+                positions.push({ sport: "🏀", position: "Разыгрывающий", reason: "Быстрая реакция" });
+            }
+            
+            let html = '<div class="stats-grid">';
+            positions.slice(0, 3).forEach(pos => {
+                html += `
+                    <div class="stat-card">
+                        <h4>${pos.sport} ${pos.position}</h4>
+                        <div style="color: var(--text-light); font-size: 14px;">
+                            ${pos.reason}
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            
+            return html || '<p>Пройдите тест полностью для получения точных рекомендаций</p>';
+        }
+
+        function getDevelopmentPlan(results, data) {
+            const recommendations = [];
+            
+            // Анализируем слабые места
+            if (data.physical.speed100m > 16) {
+                recommendations.push("📈 <strong>Скорость:</strong> Интервальные тренировки, спринты 3 раза в неделю");
+            }
+            
+            if (data.physical.pushups < 20) {
+                recommendations.push("💪 <strong>Сила:</strong> Силовые тренировки 2 раза в неделю, отжимания с прогрессией");
+            }
+            
+            if (data.physical.plank < 90) {
+                recommendations.push("❤️ <strong>Выносливость:</strong> Кардио тренировки, бег, плавание");
+            }
+            
+            if (data.psychological.teamwork < 7) {
+                recommendations.push("👥 <strong>Командность:</strong> Командные виды спорта, групповые тренировки");
+            }
+            
+            if (data.testData?.reaction?.length && data.testData.reaction[0] > 300) {
+                recommendations.push("⚡ <strong>Реакция:</strong> Игровые виды спорта, теннис, бадминтон");
+            }
+            
+            if (recommendations.length === 0) {
+                recommendations.push("🎯 <strong>Поддержание формы:</strong> Разнообразные тренировки 3-4 раза в неделю");
+                recommendations.push("🍎 <strong>Питание:</strong> Сбалансированная диета, достаточное количество белка");
+                recommendations.push("💤 <strong>Восстановление:</strong> Сон 7-8 часов, растяжка после тренировок");
+            }
+            
+            return `
+                <ul style="padding-left: 20px;">
+                    ${recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                </ul>
+                <div style="margin-top: 20px; padding: 15px; background: #e8f5e9; border-radius: var(--radius);">
+                    <strong>🏆 Рекомендуемый план:</strong> 3 тренировки в неделю, 1 игровой день, 1 день восстановления
+                </div>
+            `;
+        }
+
+        // Сохранение результатов
+        function saveResults() {
+            const results = currentState.testResults;
+            
+            // Сохраняем имя
+            if (currentState.testData.personal.name) {
+                localStorage.setItem('userName', currentState.testData.personal.name);
+                document.getElementById('user-name').textContent = currentState.testData.personal.name;
+            }
+            
+            // Сохраняем результаты
+            let savedData = JSON.parse(localStorage.getItem('sportsAnalyzerData')) || {};
+            savedData.lastTest = results;
+            savedData.testHistory = savedData.testHistory || [];
+            savedData.testHistory.push(results);
+            
+            localStorage.setItem('sportsAnalyzerData', JSON.stringify(savedData));
+            localStorage.setItem('sportsAnalyzerResults', JSON.stringify(results));
+            
+            // Обновляем отображение
+            document.getElementById('user-score').textContent = `${results.overallScore}/100`;
+            document.getElementById('initial-test-alert').classList.add('hidden');
+            
+            alert('✅ Результаты сохранены!');
+            backToWelcome();
+        }
+
+        function restartTest() {
+            if (confirm('Начать новый тест? Текущие несохраненные данные будут потеряны.')) {
+                startComprehensiveTest();
+            }
+        }
+
+        // Отображение истории тестов
+        function displayTestHistory() {
+            const savedData = JSON.parse(localStorage.getItem('sportsAnalyzerData'));
+            const history = savedData?.testHistory || [];
+            
+            const container = document.getElementById('results-history');
+            
+            if (history.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--text-light);">
+                        <i class="fas fa-clipboard-list" style="font-size: 48px; margin-bottom: 20px;"></i>
+                        <h3>История тестов пуста</h3>
+                        <p>Пройдите первый тест, чтобы увидеть здесь свои результаты!</p>
+                        <button class="btn btn-primary" onclick="startComprehensiveTest()" style="margin-top: 20px;">
+                            <i class="fas fa-play"></i> Пройти тест
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '<div class="stats-grid">';
+            
+            history.reverse().forEach((test, index) => {
+                const date = new Date(test.timestamp).toLocaleDateString();
+                const time = new Date(test.timestamp).toLocaleTimeString();
+                
+                html += `
+                    <div class="stat-card" onclick="showTestDetails(${history.length - 1 - index})" style="cursor: pointer;">
+                        <h4>Тест от ${date}</h4>
+                        <div style="font-size: 32px; color: var(--primary); font-weight: bold;">
+                            ${test.overallScore}/100
+                        </div>
+                        <div style="font-size: 12px; color: var(--text-light);">
+                            ${time} • ${test.scores.physical}/100 физика
+                        </div>
+                        <div style="margin-top: 10px; font-size: 12px;">
+                            <i>Нажмите для деталей</i>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function showTestDetails(index) {
+            const savedData = JSON.parse(localStorage.getItem('sportsAnalyzerData'));
+            const test = savedData.testHistory[index];
+            
+            let details = `Детали теста от ${new Date(test.timestamp).toLocaleDateString()}:\n\n`;
+            details += `Общий балл: ${test.overallScore}/100\n\n`;
+            details += `Физические показатели: ${test.scores.physical}/100\n`;
+            details += `Реакция: ${test.scores.reaction}/100\n`;
+            details += `Психология: ${test.scores.psychological}/100\n`;
+            details += `Тактика: ${test.scores.tactical}/100\n\n`;
+            
+            if (test.data?.personal?.name) {
+                details += `Имя: ${test.data.personal.name}\n`;
+                details += `Возраст: ${test.data.personal.age}\n`;
+                details += `Рост: ${test.data.personal.height} см\n`;
+                details += `Вес: ${test.data.personal.weight} кг\n`;
+            }
+            
+            alert(details);
+        }
+
+        // Выбор спорта для анализа
+        function selectSport(sport) {
+            const sportData = SPORTS_DATA[sport];
+            if (!sportData) return;
+            
+            document.getElementById('sport-analysis-title').innerHTML = 
+                `<i class="fas fa-chart-pie"></i> Анализ для ${sportData.name}`;
+            
+            const container = document.getElementById('sport-analysis-content');
+            
+            // Получаем последние результаты теста
+            const savedData = JSON.parse(localStorage.getItem('sportsAnalyzerData'));
+            const lastTest = savedData?.lastTest;
+            
+            if (!lastTest) {
+                container.innerHTML = `
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <div>
+                            <strong>Сначала пройдите комплексный тест</strong>
+                            <p>Для анализа позиций в ${sportData.name} нужны ваши физические данные</p>
+                            <button class="btn btn-primary" onclick="startComprehensiveTest()" style="margin-top: 10px;">
+                                <i class="fas fa-play"></i> Пройти тест
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                const userData = lastTest.data;
+                const analysis = analyzeForSport(sport, userData);
+                container.innerHTML = analysis;
+            }
+            
+            showPage('page-sport-analysis');
+        }
+
+        function analyzeForSport(sport, userData) {
+            const sportData = SPORTS_DATA[sport];
+            let html = `<h3>Рекомендуемые позиции в ${sportData.name}:</h3>`;
+            
+            html += '<div class="stats-grid">';
+            
+            sportData.positions.forEach(position => {
+                // Упрощенный расчет совпадения
+                let matchScore = 50; // Базовый балл
+                
+                // Анализируем требования позиции
+                if (position.requirements.reaction && userData.testData?.reaction?.length) {
+                    const avgReaction = userData.testData.reaction.reduce((a, b) => a + b, 0) / userData.testData.reaction.length;
+                    if (avgReaction < 300) matchScore += 15;
+                }
+                
+                if (position.requirements.strength && userData.physical.pushups >= 20) {
+                    matchScore += 10;
+                }
+                
+                if (position.requirements.leadership && userData.psychological.leadership >= 7) {
+                    matchScore += 10;
+                }
+                
+                if (position.requirements.speed && userData.physical.speed100m <= 16) {
+                    matchScore += 15;
+                }
+                
+                matchScore = Math.min(matchScore, 100);
+                
+                html += `
+                    <div class="stat-card">
+                        <h4>${position.name}</h4>
+                        <div style="font-size: 24px; color: var(--primary); font-weight: bold;">
+                            ${matchScore}%
+                        </div>
+                        <div class="progress-bar" style="margin: 10px 0;">
+                            <div class="progress-fill" style="width: ${matchScore}%"></div>
+                        </div>
+                        <div style="font-size: 12px; color: var(--text-light);">
+                            ${getPositionTips(position.name, sport)}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            
+            // Добавляем общие рекомендации
+            html += `
+                <div class="analysis-card" style="margin-top: 20px;">
+                    <h4><i class="fas fa-lightbulb"></i> Рекомендации для ${sportData.name}:</h4>
+                    <ul style="padding-left: 20px;">
+                        ${getSportSpecificTips(sport, userData)}
+                    </ul>
+                </div>
+            `;
+            
+            return html;
+        }
+
+        function getPositionTips(position, sport) {
+            const tips = {
+                'football': {
+                    'Вратарь': 'Тренируйте реакцию и прыгучесть',
+                    'Нападающий': 'Развивайте скорость и точность удара',
+                    'Полузащитник': 'Улучшайте выносливость и видение поля'
+                },
+                'basketball': {
+                    'Разыгрывающий': 'Работайте над пасом и контролем мяча',
+                    'Центровой': 'Тренируйте игру под кольцом и подборы'
+                }
+            };
+            
+            return tips[sport]?.[position] || 'Требуется всестороннее развитие';
+        }
+
+        function getSportSpecificTips(sport, userData) {
+            const tips = [];
+            
+            switch(sport) {
+                case 'football':
+                    if (userData.physical.speed100m > 16) tips.push('Улучшайте скорость: спринтерские тренировки 2 раза в неделю');
+                    if (userData.physical.plank < 120) tips.push('Работайте над выносливостью: интервальный бег, кроссы');
+                    tips.push('Техника: работа с мячом ежедневно минимум 30 минут');
+                    break;
+                case 'basketball':
+                    if (userData.personal.height < 180) tips.push('Компенсируйте рост скоростью и техникой');
+                    tips.push('Броски: минимум 100 бросков в день с разных позиций');
+                    tips.push('Дриблинг: работа с мячом на скорость и контроль');
+                    break;
+                case 'volleyball':
+                    tips.push('Прыгучесть: плиометрические упражнения 3 раза в неделю');
+                    tips.push('Реакция: упражнения у сетки, работа на блоке');
+                    tips.push('Подача: отработка разных видов подач');
+                    break;
+            }
+            
+            return tips.map(tip => `<li>${tip}</li>`).join('');
+        }
+
+        // Мини-игры
+        function startReactionGame() {
+            alert('🎮 Игра "Реакция" запущена! Кликайте по появляющимся целям как можно быстрее.');
+            // Здесь можно реализовать полноценную игру
+        }
+
+        function startCoordinationGame() {
+            alert('🎯 Игра "Координация" запущена! Попадайте в движущиеся мишени.');
+        }
+
+        function startMemoryGame() {
+            alert('🧠 Игра "Память" запущена! Запоминайте последовательности действий.');
+        }
+
+        function startStrategyGame() {
+            alert('♟️ Игра "Стратегия" запущена! Решайте тактические задачи.');
+        }
+
+        // Инициализация при загрузке
+        window.onload = function() {
+            initApp();
+            // Инициализировать шашки при первом отображении
+            setTimeout(initCheckers, 100);
+            
+            // Инициализировать слайдеры
+            updateRangeValue('leadership');
+            updateRangeValue('stress');
+            updateRangeValue('teamwork');
+        };
+    </script>
+</body>
+</html>
