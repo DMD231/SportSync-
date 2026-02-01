@@ -24,40 +24,44 @@
             --success-color: #10B981;
             --warning-color: #F59E0B;
             --danger-color: #EF4444;
+            --info-color: #3B82F6;
+            --calendar-today: #3B82F6;
+            --calendar-workout: #10B981;
+            --calendar-rest: #8B5CF6;
             
-            /* Уменьшено на 20% от оригинальных */
-            --spacing-xs: 4px;
-            --spacing-sm: 8px;
-            --spacing-md: 12px;
-            --spacing-lg: 16px;
-            --spacing-xl: 20px;
-            --spacing-xxl: 32px;
+            /* Spacing - Уменьшено для компактности */
+            --spacing-xs: 3px;
+            --spacing-sm: 6px;
+            --spacing-md: 10px;
+            --spacing-lg: 14px;
+            --spacing-xl: 18px;
+            --spacing-xxl: 24px;
             
-            /* Typography - Уменьшено на 20% */
-            --font-xs: 12px;
-            --font-sm: 14px;
-            --font-base: 18px;
-            --font-lg: 21px;
-            --font-xl: 26px;
-            --font-xxl: 32px;
+            /* Typography - Уменьшено для компактности */
+            --font-xs: 11px;
+            --font-sm: 13px;
+            --font-base: 16px;
+            --font-lg: 18px;
+            --font-xl: 22px;
+            --font-xxl: 26px;
             
             /* Border Radius */
-            --radius-sm: 4px;
-            --radius: 8px;
-            --radius-lg: 12px;
+            --radius-sm: 3px;
+            --radius: 6px;
+            --radius-lg: 10px;
             
-            /* Line Height - For Readability */
-            --line-height: 1.4;
+            /* Line Height */
+            --line-height: 1.3;
             
             /* Transitions */
-            --transition-fast: 0.15s ease;
-            --transition-base: 0.3s ease;
-            --transition-slow: 0.5s ease;
+            --transition-fast: 0.12s ease;
+            --transition-base: 0.25s ease;
+            --transition-slow: 0.4s ease;
             
             /* Shadows */
-            --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.3);
-            --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.4);
-            --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.5);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
         
         /* Light Theme Variables */
@@ -72,6 +76,13 @@
             --border-light: #EEEEEE;
             --accent-color: #000000;
             --accent-secondary: #888888;
+            --success-color: #059669;
+            --warning-color: #D97706;
+            --danger-color: #DC2626;
+            --info-color: #2563EB;
+            --calendar-today: #2563EB;
+            --calendar-workout: #059669;
+            --calendar-rest: #7C3AED;
         }
 
         /* Reset & Base Styles */
@@ -85,7 +96,7 @@
         }
 
         html {
-            font-size: 16px; /* Уменьшено с 20px */
+            font-size: 14px;
         }
 
         body {
@@ -107,19 +118,19 @@
             flex-direction: column;
         }
 
-        /* Header */
+        /* Header - Компактный */
         .header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 56px; /* Уменьшено с 72px */
+            height: 48px;
             background: var(--bg-secondary);
             border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 var(--spacing-lg);
+            padding: 0 var(--spacing-md);
             z-index: 1000;
             backdrop-filter: blur(20px);
             background-color: rgba(17, 17, 17, 0.95);
@@ -136,12 +147,12 @@
         }
 
         .logo-icon {
-            width: 28px; /* Уменьшено с 36px */
-            height: 28px;
+            width: 24px;
+            height: 24px;
         }
 
         .logo-text {
-            font-size: var(--font-lg);
+            font-size: var(--font-base);
             font-weight: 600;
             letter-spacing: -0.02em;
         }
@@ -149,12 +160,89 @@
         .header-actions {
             display: flex;
             align-items: center;
-            gap: var(--spacing-md);
+            gap: var(--spacing-sm);
         }
 
-        .profile-btn {
-            width: 40px; /* Уменьшено с 48px */
-            height: 40px;
+        /* Profile button in header - уменьшен */
+        .profile-btn-header {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-base);
+            padding: 0;
+        }
+
+        .profile-btn-header:hover {
+            background: var(--border-color);
+            transform: scale(1.05);
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            padding: 52px var(--spacing-md) 52px;
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .section.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mini Calendar */
+        .calendar-mini {
+            margin: var(--spacing-sm) 0 var(--spacing-md);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: var(--spacing-sm);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-sm);
+            padding: 0 var(--spacing-xs);
+        }
+
+        .calendar-title {
+            font-size: var(--font-sm);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: var(--spacing-xs);
+        }
+
+        .calendar-nav-btn {
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             background: var(--bg-tertiary);
             border: 1px solid var(--border-color);
@@ -165,37 +253,153 @@
             transition: var(--transition-base);
         }
 
-        .profile-btn:hover {
+        .calendar-nav-btn:hover {
             background: var(--border-color);
         }
 
-        /* Main Content */
-        .main {
-            flex: 1;
-            padding: 60px var(--spacing-lg) 60px; /* Уменьшено для header и nav */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+        }
+
+        .calendar-day-header {
+            text-align: center;
+            font-size: var(--font-xs);
+            color: var(--text-tertiary);
+            padding: var(--spacing-xs) 0;
+            font-weight: 500;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
             display: flex;
-            flex-direction: column;
-            gap: var(--spacing-xl);
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-xs);
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: var(--transition-fast);
+            border: 1px solid transparent;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .calendar-day.today {
+            background: var(--calendar-today);
+            color: white;
+            border-color: var(--calendar-today);
+        }
+
+        .calendar-day.workout {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success-color);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .calendar-day.rest {
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--calendar-rest);
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        .calendar-day.other-month {
+            color: var(--text-tertiary);
+            opacity: 0.5;
+        }
+
+        .calendar-day.active {
+            border: 2px solid var(--accent-color);
+        }
+
+        /* Calendar Modal */
+        .calendar-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-primary);
+            z-index: 4000;
+            overflow-y: auto;
+            padding: 0;
+            display: none;
+        }
+
+        .calendar-modal.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .calendar-modal-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .calendar-modal-content {
             max-width: 800px;
             margin: 0 auto;
-            width: 100%;
+            padding: var(--spacing-md);
         }
 
-        /* Sections */
-        .section {
-            display: none;
-            flex-direction: column;
-            gap: var(--spacing-xl);
-            animation: fadeIn 0.4s ease;
+        .calendar-modal-day {
+            margin-bottom: var(--spacing-lg);
+            padding: var(--spacing-md);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            background: var(--bg-secondary);
         }
 
-        .section.active {
+        .calendar-modal-title {
+            font-size: var(--font-lg);
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            color: var(--accent-color);
+        }
+
+        .calendar-modal-subtitle {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .workout-schedule {
+            margin: var(--spacing-md) 0;
+        }
+
+        .schedule-item {
+            padding: var(--spacing-sm);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            margin-bottom: var(--spacing-xs);
+            background: var(--bg-tertiary);
             display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .schedule-time {
+            font-weight: 600;
+            color: var(--success-color);
+            min-width: 60px;
+            font-size: var(--font-sm);
+        }
+
+        .schedule-activity {
+            flex: 1;
+            font-size: var(--font-sm);
         }
 
         /* Onboarding */
@@ -209,8 +413,8 @@
             z-index: 2000;
             display: flex;
             flex-direction: column;
-            padding: var(--spacing-lg);
-            gap: var(--spacing-lg);
+            padding: var(--spacing-md);
+            gap: var(--spacing-md);
             overflow-y: auto;
         }
 
@@ -221,7 +425,7 @@
         .onboarding-step {
             display: none;
             flex-direction: column;
-            gap: var(--spacing-lg);
+            gap: var(--spacing-md);
             flex: 1;
         }
 
@@ -232,12 +436,12 @@
         .onboarding-progress {
             display: flex;
             gap: var(--spacing-xs);
-            margin-bottom: var(--spacing-md);
+            margin-bottom: var(--spacing-sm);
         }
 
         .progress-step {
             flex: 1;
-            height: 3px;
+            height: 2px;
             background: var(--border-color);
             border-radius: 1px;
             transition: var(--transition-base);
@@ -247,25 +451,25 @@
             background: var(--accent-color);
         }
 
-        /* Test Grid Layout */
+        /* Test Grid Layout - уменьшен */
         .test-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: var(--spacing-sm);
-            margin: var(--spacing-md) 0;
+            gap: var(--spacing-xs);
+            margin: var(--spacing-sm) 0;
         }
 
         .test-option-btn {
-            padding: var(--spacing-sm);
+            padding: var(--spacing-xs) var(--spacing-sm);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
             background: var(--bg-secondary);
             color: var(--text-primary);
-            font-size: var(--font-sm);
+            font-size: var(--font-xs);
             font-weight: 500;
             cursor: pointer;
             transition: var(--transition-base);
-            min-height: 44px;
+            min-height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -309,7 +513,7 @@
             font-size: var(--font-sm);
             color: var(--text-secondary);
             line-height: var(--line-height);
-            margin-bottom: var(--spacing-md);
+            margin-bottom: var(--spacing-sm);
         }
 
         .caption {
@@ -325,25 +529,18 @@
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
-            padding: var(--spacing-md);
+            padding: var(--spacing-sm);
             transition: var(--transition-base);
         }
 
         .card:hover {
             border-color: var(--border-light);
-            box-shadow: var(--shadow-md);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: var(--spacing-sm);
+            box-shadow: var(--shadow-sm);
         }
 
         /* Forms */
         .form-group {
-            margin-bottom: var(--spacing-md);
+            margin-bottom: var(--spacing-sm);
         }
 
         .form-label {
@@ -356,7 +553,7 @@
 
         .form-input {
             width: 100%;
-            padding: var(--spacing-sm);
+            padding: var(--spacing-xs) var(--spacing-sm);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
             font-size: var(--font-base);
@@ -365,6 +562,7 @@
             color: var(--text-primary);
             transition: var(--transition-base);
             line-height: var(--line-height);
+            height: 36px;
         }
 
         .form-input:focus {
@@ -379,20 +577,20 @@
 
         .form-row {
             display: flex;
-            gap: var(--spacing-sm);
-            margin-bottom: var(--spacing-sm);
+            gap: var(--spacing-xs);
+            margin-bottom: var(--spacing-xs);
         }
 
         .form-col {
             flex: 1;
         }
 
-        /* Buttons */
+        /* Buttons - уменьшены */
         .btn {
-            padding: var(--spacing-sm) var(--spacing-md);
+            padding: var(--spacing-xs) var(--spacing-sm);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
-            font-size: var(--font-base);
+            font-size: var(--font-sm);
             font-weight: 500;
             font-family: inherit;
             cursor: pointer;
@@ -405,14 +603,14 @@
             gap: var(--spacing-xs);
             text-align: center;
             text-decoration: none;
-            min-height: 44px; /* Уменьшено с 60px */
+            min-height: 36px;
             line-height: var(--line-height);
         }
 
         .btn:hover {
             background: var(--bg-tertiary);
             transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
+            box-shadow: var(--shadow-sm);
         }
 
         .btn-primary {
@@ -432,34 +630,34 @@
 
         .btn-sm {
             padding: var(--spacing-xs) var(--spacing-sm);
-            font-size: var(--font-sm);
-            min-height: 36px; /* Уменьшено с 48px */
+            font-size: var(--font-xs);
+            min-height: 30px;
         }
 
         .icon-btn {
-            width: 20px; /* Уменьшено с 24px */
-            height: 20px;
+            width: 16px;
+            height: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        /* Test Components */
+        /* Test Components - уменьшены */
         .test-area {
             width: 100%;
-            height: 250px; /* Уменьшено с 360px */
+            height: 200px;
             background: var(--bg-tertiary);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
             position: relative;
             overflow: hidden;
-            margin: var(--spacing-md) 0;
+            margin: var(--spacing-sm) 0;
         }
 
         .reaction-target {
             position: absolute;
-            width: 56px; /* Уменьшено с 72px */
-            height: 56px;
+            width: 44px;
+            height: 44px;
             background: var(--accent-color);
             border-radius: 50%;
             cursor: pointer;
@@ -470,19 +668,19 @@
         .test-stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: var(--spacing-sm);
-            margin-top: var(--spacing-md);
+            gap: var(--spacing-xs);
+            margin-top: var(--spacing-sm);
         }
 
         .stat-box {
-            padding: var(--spacing-sm);
+            padding: var(--spacing-xs);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
             text-align: center;
         }
 
         .stat-value {
-            font-size: var(--font-lg);
+            font-size: var(--font-base);
             font-weight: 600;
             margin-bottom: var(--spacing-xs);
         }
@@ -496,17 +694,17 @@
 
         /* Home - Main Hub */
         .welcome-section {
-            margin-bottom: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
         }
 
         .greeting {
-            font-size: var(--font-lg);
+            font-size: var(--font-base);
             font-weight: 600;
             margin-bottom: var(--spacing-xs);
         }
 
         .time-based-section {
-            margin-bottom: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
         }
 
         .time-indicator {
@@ -518,24 +716,25 @@
             border-radius: var(--radius);
             margin-bottom: var(--spacing-sm);
             font-weight: 500;
+            font-size: var(--font-sm);
         }
 
         .time-icon {
-            width: 16px; /* Уменьшено */
-            height: 16px;
+            width: 14px;
+            height: 14px;
         }
 
         .favorite-sport {
-            margin-bottom: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
         }
 
         .sport-card-large {
-            padding: var(--spacing-md);
+            padding: var(--spacing-sm);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
             display: flex;
             align-items: center;
-            gap: var(--spacing-md);
+            gap: var(--spacing-sm);
             transition: var(--transition-base);
             cursor: pointer;
         }
@@ -543,12 +742,12 @@
         .sport-card-large:hover {
             border-color: var(--border-light);
             transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+            box-shadow: var(--shadow-sm);
         }
 
         .sport-icon-large {
-            width: 56px; /* Уменьшено с 72px */
-            height: 56px;
+            width: 44px;
+            height: 44px;
             flex-shrink: 0;
         }
 
@@ -564,20 +763,20 @@
 
         .sport-desc {
             color: var(--text-secondary);
-            font-size: var(--font-sm);
+            font-size: var(--font-xs);
             line-height: var(--line-height);
         }
 
         /* Sports Grid */
         .sports-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: var(--spacing-sm);
-            margin: var(--spacing-md) 0;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: var(--spacing-xs);
+            margin: var(--spacing-sm) 0;
         }
 
         .sport-card {
-            padding: var(--spacing-md);
+            padding: var(--spacing-sm);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
             text-align: center;
@@ -593,7 +792,7 @@
         .sport-card:hover {
             border-color: var(--accent-color);
             transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
+            box-shadow: var(--shadow-sm);
         }
 
         .sport-card.favorite {
@@ -605,8 +804,8 @@
             position: absolute;
             top: var(--spacing-xs);
             right: var(--spacing-xs);
-            width: 20px; /* Уменьшено */
-            height: 20px;
+            width: 16px;
+            height: 16px;
             cursor: pointer;
             transition: var(--transition-base);
         }
@@ -616,21 +815,21 @@
         }
 
         .sport-icon {
-            width: 40px; /* Уменьшено с 48px */
-            height: 40px;
+            width: 32px;
+            height: 32px;
             margin-bottom: var(--spacing-xs);
         }
 
         /* Today Recommendations */
         .today-recommendations {
-            margin: var(--spacing-lg) 0;
+            margin: var(--spacing-md) 0;
         }
 
         .recommendation-card {
-            padding: var(--spacing-md);
+            padding: var(--spacing-sm);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
-            margin-bottom: var(--spacing-sm);
+            margin-bottom: var(--spacing-xs);
             background: var(--bg-secondary);
         }
 
@@ -642,12 +841,12 @@
         }
 
         .recommendation-icon {
-            width: 24px; /* Уменьшено */
-            height: 24px;
+            width: 20px;
+            height: 20px;
         }
 
         .recommendation-title {
-            font-size: var(--font-base);
+            font-size: var(--font-sm);
             font-weight: 600;
         }
 
@@ -662,7 +861,7 @@
             align-items: center;
             gap: var(--spacing-xs);
             line-height: var(--line-height);
-            font-size: var(--font-sm);
+            font-size: var(--font-xs);
         }
 
         .recommendation-item:last-child {
@@ -670,8 +869,8 @@
         }
 
         .check-icon {
-            width: 16px; /* Уменьшено */
-            height: 16px;
+            width: 14px;
+            height: 14px;
             color: var(--success-color);
             flex-shrink: 0;
         }
@@ -680,20 +879,20 @@
         .profile-header {
             display: flex;
             align-items: center;
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-lg);
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
         }
 
         .profile-avatar {
-            width: 72px; /* Уменьшено с 96px */
-            height: 72px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             background: var(--bg-tertiary);
             border: 2px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: var(--font-lg);
+            font-size: var(--font-base);
             font-weight: 600;
         }
 
@@ -702,25 +901,25 @@
         }
 
         .profile-name {
-            font-size: var(--font-lg);
+            font-size: var(--font-base);
             font-weight: 600;
             margin-bottom: var(--spacing-xs);
         }
 
         .profile-meta {
             color: var(--text-secondary);
-            font-size: var(--font-sm);
+            font-size: var(--font-xs);
         }
 
         .profile-stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: var(--spacing-sm);
-            margin: var(--spacing-lg) 0;
+            gap: var(--spacing-xs);
+            margin: var(--spacing-md) 0;
         }
 
         .profile-stat-card {
-            padding: var(--spacing-md);
+            padding: var(--spacing-sm);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
             text-align: center;
@@ -728,13 +927,13 @@
         }
 
         .profile-stat-value {
-            font-size: var(--font-lg);
+            font-size: var(--font-base);
             font-weight: 600;
             margin-bottom: var(--spacing-xs);
         }
 
         .personal-records {
-            margin: var(--spacing-lg) 0;
+            margin: var(--spacing-md) 0;
         }
 
         .record-list {
@@ -742,10 +941,10 @@
         }
 
         .record-item {
-            padding: var(--spacing-sm);
+            padding: var(--spacing-xs);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
-            margin-bottom: var(--spacing-sm);
+            margin-bottom: var(--spacing-xs);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -759,6 +958,7 @@
         .record-name {
             font-weight: 500;
             margin-bottom: var(--spacing-xs);
+            font-size: var(--font-sm);
         }
 
         .record-date {
@@ -767,7 +967,7 @@
         }
 
         .record-value {
-            font-size: var(--font-base);
+            font-size: var(--font-sm);
             font-weight: 600;
             color: var(--success-color);
         }
@@ -779,16 +979,16 @@
             background: var(--bg-tertiary);
             padding: var(--spacing-xs);
             border-radius: var(--radius);
-            margin-bottom: var(--spacing-md);
+            margin-bottom: var(--spacing-sm);
         }
 
         .analysis-tab {
             flex: 1;
-            padding: var(--spacing-sm);
+            padding: var(--spacing-xs) var(--spacing-sm);
             border: none;
             background: transparent;
             color: var(--text-tertiary);
-            font-size: var(--font-sm);
+            font-size: var(--font-xs);
             font-weight: 500;
             cursor: pointer;
             border-radius: var(--radius-sm);
@@ -802,10 +1002,15 @@
 
         .analysis-content {
             display: none;
+            opacity: 0;
+            transform: translateY(5px);
+            transition: opacity var(--transition-base), transform var(--transition-base);
         }
 
         .analysis-content.active {
             display: block;
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* Sport Details Modal */
@@ -818,7 +1023,7 @@
             background: var(--bg-primary);
             z-index: 3000;
             overflow-y: auto;
-            padding: var(--spacing-lg);
+            padding: 0;
             display: none;
         }
 
@@ -830,72 +1035,129 @@
         .sport-details-header {
             display: flex;
             align-items: center;
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-lg);
-            padding-bottom: var(--spacing-md);
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+            padding: var(--spacing-md);
             border-bottom: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         .sport-details-content {
             max-width: 800px;
             margin: 0 auto;
+            padding: var(--spacing-md);
         }
 
         .sport-details-section {
-            margin-bottom: var(--spacing-xl);
-            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            padding: var(--spacing-sm);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
             background: var(--bg-secondary);
         }
 
         .sport-details-section h3 {
-            margin-bottom: var(--spacing-md);
+            margin-bottom: var(--spacing-sm);
             color: var(--accent-color);
+            font-size: var(--font-base);
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: var(--spacing-xs);
         }
 
+        /* Workout list */
         .workout-list {
             list-style: none;
-            margin: var(--spacing-md) 0;
+            margin: var(--spacing-sm) 0;
         }
 
         .workout-item {
-            padding: var(--spacing-md);
-            margin-bottom: var(--spacing-sm);
+            padding: var(--spacing-sm);
+            margin-bottom: var(--spacing-xs);
             border: 1px solid var(--border-light);
             border-radius: var(--radius);
             background: var(--bg-tertiary);
+            border-left: 3px solid var(--info-color);
+        }
+
+        .workout-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .workout-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-xs);
         }
 
         .workout-name {
             font-weight: 600;
-            margin-bottom: var(--spacing-xs);
             color: var(--text-primary);
+            font-size: var(--font-sm);
         }
 
         .workout-details {
-            font-size: var(--font-sm);
+            font-size: var(--font-xs);
             color: var(--text-secondary);
             margin-bottom: var(--spacing-xs);
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .workout-detail-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .workout-tip {
+            font-size: var(--font-xs);
+            color: var(--success-color);
+            font-style: italic;
+            margin-top: var(--spacing-xs);
+            padding: var(--spacing-xs);
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: var(--radius-sm);
+            border-left: 2px solid var(--success-color);
+        }
+
+        .adaptive-note {
+            display: inline-block;
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-xs);
+            margin-top: var(--spacing-xs);
+            border-left: 2px solid var(--warning-color);
+        }
+
+        .dumbbell-weight {
+            font-weight: 600;
+            color: var(--warning-color);
         }
 
         .nutrition-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: var(--spacing-md);
-            margin: var(--spacing-md) 0;
+            gap: var(--spacing-sm);
+            margin: var(--spacing-sm) 0;
         }
 
         .nutrition-item {
-            padding: var(--spacing-md);
+            padding: var(--spacing-sm);
             border: 1px solid var(--border-light);
             border-radius: var(--radius);
             text-align: center;
             background: var(--bg-tertiary);
+            border-top: 2px solid var(--success-color);
         }
 
         .nutrition-value {
-            font-size: var(--font-lg);
+            font-size: var(--font-base);
             font-weight: 600;
             color: var(--success-color);
             margin-bottom: var(--spacing-xs);
@@ -907,56 +1169,108 @@
             text-transform: uppercase;
         }
 
-        .supplements-list {
-            margin: var(--spacing-md) 0;
+        .nutrition-dynamic-note {
+            font-size: var(--font-xs);
+            color: var(--text-tertiary);
+            margin-top: var(--spacing-xs);
+            font-style: italic;
         }
 
-        .supplement-item {
-            padding: var(--spacing-md);
-            margin-bottom: var(--spacing-sm);
+        /* Supplements */
+        .supplements-categories {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+            margin: var(--spacing-sm) 0;
+        }
+
+        .supplement-category {
+            padding: var(--spacing-sm);
             border: 1px solid var(--border-light);
             border-radius: var(--radius);
             background: var(--bg-tertiary);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            margin-bottom: var(--spacing-sm);
+            padding-bottom: var(--spacing-xs);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .category-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--warning-color);
+        }
+
+        .category-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: var(--font-sm);
+        }
+
+        .supplements-list {
+            list-style: none;
+        }
+
+        .supplement-item {
+            padding: var(--spacing-sm);
+            margin-bottom: var(--spacing-xs);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            background: var(--bg-primary);
+        }
+
+        .supplement-item:last-child {
+            margin-bottom: 0;
         }
 
         .supplement-name {
             font-weight: 600;
             margin-bottom: var(--spacing-xs);
             color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            font-size: var(--font-sm);
         }
 
         .supplement-desc {
-            font-size: var(--font-sm);
+            font-size: var(--font-xs);
             color: var(--text-secondary);
             margin-bottom: var(--spacing-xs);
+            line-height: 1.4;
         }
 
         .disclaimer {
-            padding: var(--spacing-md);
-            margin-top: var(--spacing-md);
+            padding: var(--spacing-sm);
+            margin-top: var(--spacing-sm);
             border: 1px solid var(--warning-color);
             border-radius: var(--radius);
             background: rgba(245, 158, 11, 0.1);
             color: var(--warning-color);
-            font-size: var(--font-sm);
+            font-size: var(--font-xs);
             text-align: center;
         }
 
         .gym-goal-selector {
             display: flex;
-            gap: var(--spacing-sm);
-            margin-bottom: var(--spacing-lg);
+            gap: var(--spacing-xs);
+            margin-bottom: var(--spacing-md);
         }
 
         .goal-btn {
             flex: 1;
-            padding: var(--spacing-sm);
+            padding: var(--spacing-xs) var(--spacing-sm);
             border: 1px solid var(--border-color);
             background: var(--bg-tertiary);
             color: var(--text-secondary);
             border-radius: var(--radius);
             cursor: pointer;
-            font-size: var(--font-sm);
+            font-size: var(--font-xs);
             font-weight: 500;
             transition: var(--transition-base);
         }
@@ -965,6 +1279,12 @@
             background: var(--accent-color);
             color: var(--bg-primary);
             border-color: var(--accent-color);
+        }
+
+        /* Mark workout button */
+        .mark-workout-btn {
+            margin-top: var(--spacing-md);
+            width: 100%;
         }
 
         /* Navigation */
@@ -976,7 +1296,7 @@
             background: var(--bg-secondary);
             border-top: 1px solid var(--border-color);
             display: flex;
-            padding: var(--spacing-xs) var(--spacing-md);
+            padding: var(--spacing-xs) var(--spacing-sm);
             gap: var(--spacing-xs);
             z-index: 1000;
             backdrop-filter: blur(20px);
@@ -1014,8 +1334,8 @@
         }
 
         .nav-icon {
-            width: 20px; /* Уменьшено */
-            height: 20px;
+            width: 16px;
+            height: 16px;
         }
 
         /* Loading */
@@ -1024,12 +1344,12 @@
             align-items: center;
             justify-content: center;
             gap: var(--spacing-xs);
-            padding: var(--spacing-lg);
+            padding: var(--spacing-md);
         }
 
         .spinner {
-            width: 24px; /* Уменьшено */
-            height: 24px;
+            width: 20px;
+            height: 20px;
             border: 2px solid var(--border-color);
             border-top-color: var(--accent-color);
             border-radius: 50%;
@@ -1038,26 +1358,6 @@
 
         @keyframes spin {
             to { transform: rotate(360deg); }
-        }
-
-        /* Test Results Modal */
-        .test-results-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--bg-primary);
-            z-index: 3000;
-            display: flex;
-            flex-direction: column;
-            padding: var(--spacing-lg);
-            gap: var(--spacing-lg);
-            animation: fadeIn 0.3s ease;
-        }
-
-        .test-results-modal.hidden {
-            display: none;
         }
 
         /* Utility Classes */
@@ -1087,7 +1387,7 @@
         /* Responsive */
         @media (max-width: 768px) {
             .main {
-                padding: 60px var(--spacing-sm) 60px;
+                padding: 52px var(--spacing-sm) 52px;
             }
             
             .header {
@@ -1122,23 +1422,23 @@
 
         @media (max-width: 480px) {
             .main {
-                padding: 60px var(--spacing-xs) 60px;
+                padding: 52px var(--spacing-xs) 52px;
             }
             
             .onboarding {
-                padding: var(--spacing-md);
+                padding: var(--spacing-sm);
             }
             
             .sport-card-large {
                 flex-direction: column;
                 text-align: center;
-                gap: var(--spacing-sm);
+                gap: var(--spacing-xs);
             }
             
             .profile-header {
                 flex-direction: column;
                 text-align: center;
-                gap: var(--spacing-sm);
+                gap: var(--spacing-xs);
             }
             
             .sports-grid {
@@ -1147,6 +1447,10 @@
             
             .test-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .calendar-grid {
+                gap: 1px;
             }
         }
     </style>
@@ -1172,21 +1476,21 @@
                         <h3 class="h3">Как это работает:</h3>
                         <div class="d-flex flex-column gap-4 mt-2">
                             <div class="d-flex gap-3 align-center">
-                                <div style="width: 32px; height: 32px; background: var(--bg-tertiary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600;">1</div>
+                                <div style="width: 28px; height: 28px; background: var(--bg-tertiary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600;">1</div>
                                 <div>
                                     <div style="font-weight: 500;">Ввод данных</div>
                                     <div class="text-muted">Рост, вес, возраст и замеры тела</div>
                                 </div>
                             </div>
                             <div class="d-flex gap-3 align-center">
-                                <div style="width: 32px; height: 32px; background: var(--bg-tertiary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600;">2</div>
+                                <div style="width: 28px; height: 28px; background: var(--bg-tertiary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600;">2</div>
                                 <div>
                                     <div style="font-weight: 500;">Тестирование</div>
                                     <div class="text-muted">Реакция и упражнения с весом тела</div>
                                 </div>
                             </div>
                             <div class="d-flex gap-3 align-center">
-                                <div style="width: 32px; height: 32px; background: var(--bg-tertiary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600;">3</div>
+                                <div style="width: 28px; height: 28px; background: var(--bg-tertiary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600;">3</div>
                                 <div>
                                     <div style="font-weight: 500;">Анализ</div>
                                     <div class="text-muted">AI подбирает лучший спорт и программу</div>
@@ -1278,7 +1582,7 @@
                     <p class="subtitle">Нажимайте на появляющиеся круги как можно быстрее. Тест займет 30 секунд.</p>
                     
                     <div class="test-area" id="reactionArea">
-                        <div class="text-center" style="margin-top: 100px; color: var(--text-tertiary);" id="reactionMessage">
+                        <div class="text-center" style="margin-top: 80px; color: var(--text-tertiary); font-size: var(--font-sm);" id="reactionMessage">
                             Нажмите "Начать тест"
                         </div>
                     </div>
@@ -1378,12 +1682,14 @@
 
         <!-- Sport Details Modal -->
         <div class="sport-details-modal" id="sportDetailsModal">
+            <div class="sport-details-header">
+                <button class="btn btn-sm" onclick="SportAI.closeSportDetails()" style="background: var(--bg-tertiary); border-color: var(--border-light);">
+                    ← Назад к спортам
+                </button>
+                <h2 class="h2" id="sportDetailsTitle">Название спорта</h2>
+            </div>
+            
             <div class="sport-details-content">
-                <div class="sport-details-header">
-                    <button class="btn btn-sm" onclick="SportAI.closeSportDetails()">← Назад</button>
-                    <h2 class="h2" id="sportDetailsTitle">Название спорта</h2>
-                </div>
-                
                 <!-- Для зала показываем переключатель целей -->
                 <div class="gym-goal-selector d-none" id="gymGoalSelector">
                     <button class="goal-btn active" data-goal="muscle">Набор мышц</button>
@@ -1413,13 +1719,37 @@
                 <!-- Добавки -->
                 <div class="sport-details-section">
                     <h3 class="h3">Добавки и БАДы</h3>
-                    <div class="supplements-list" id="supplementsList">
+                    <div class="supplements-categories" id="supplementsCategories">
                         <!-- Заполняется JavaScript -->
                     </div>
                     <div class="disclaimer">
                         <strong>Важно:</strong> Перед приемом любых добавок проконсультируйтесь с врачом. 
                         Данные рекомендации носят ознакомительный характер.
                     </div>
+                </div>
+
+                <!-- Кнопка отметки тренировки -->
+                <button class="btn btn-primary mark-workout-btn" onclick="SportAI.markWorkoutToday()">
+                    <svg class="icon-btn" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Отметить тренировку сегодня
+                </button>
+            </div>
+        </div>
+
+        <!-- Calendar Modal -->
+        <div class="calendar-modal" id="calendarModal">
+            <div class="calendar-modal-header">
+                <button class="btn btn-sm" onclick="SportAI.closeCalendarModal()" style="background: var(--bg-tertiary); border-color: var(--border-light);">
+                    ← Назад
+                </button>
+                <h2 class="h2" id="calendarModalTitle">Календарь тренировок</h2>
+            </div>
+            
+            <div class="calendar-modal-content">
+                <div class="calendar-modal-day" id="calendarDayInfo">
+                    <!-- Заполняется JavaScript -->
                 </div>
             </div>
         </div>
@@ -1438,8 +1768,8 @@
                 </div>
                 
                 <div class="header-actions">
-                    <div class="profile-btn" onclick="SportAI.showSection('profile')">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <div class="profile-btn-header" onclick="SportAI.showSection('profile')" title="Профиль">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12Z" stroke="currentColor" stroke-width="2"/>
                             <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                         </svg>
@@ -1455,6 +1785,30 @@
                     <div class="welcome-section">
                         <div class="greeting" id="greetingText">Доброе утро!</div>
                         <p class="subtitle">Ваши рекомендации на сегодня</p>
+                    </div>
+
+                    <!-- Mini Calendar -->
+                    <div class="card">
+                        <div class="calendar-mini">
+                            <div class="calendar-header">
+                                <div class="calendar-title" id="calendarMonthTitle">Январь 2025</div>
+                                <div class="calendar-nav">
+                                    <button class="calendar-nav-btn" onclick="SportAI.changeCalendarMonth(-1)">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </button>
+                                    <button class="calendar-nav-btn" onclick="SportAI.changeCalendarMonth(1)">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="calendar-grid" id="miniCalendar">
+                                <!-- Заполняется JavaScript -->
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Time-Based Section -->
@@ -1546,7 +1900,7 @@
                             </div>
                             
                             <button class="btn btn-primary btn-block mt-3" onclick="SportAI.updateUserData()">
-                                Обновить данные
+                                Обновить данные и пересчитать питание
                             </button>
                         </div>
                         
@@ -1698,10 +2052,23 @@
 
     <script>
         /**
-         * SportAI Pro - Final Version with Detailed Recommendations
-         * Версия 5.0: Полные детали по видам спорта
+         * SportAI Pro - Enhanced Version with Telegram CloudStorage & Calendar
+         * Версия 7.0: Вечное сохранение данных в Telegram Cloud, интерактивный календарь, адаптивные тренировки
          */
 
+        // Проверяем наличие Telegram WebApp
+        const isTelegramApp = typeof window.Telegram !== 'undefined' && 
+                              typeof window.Telegram.WebApp !== 'undefined' &&
+                              typeof window.Telegram.WebApp.CloudStorage !== 'undefined';
+
+        // Конфигурация тренировочных дней (Пн, Ср, Пт - тренировки, остальное - отдых)
+        const TRAINING_SCHEDULE = {
+            workoutDays: [1, 3, 5], // Пн=1, Ср=3, Пт=5
+            workoutTime: "18:00-20:00",
+            restDays: [0, 2, 4, 6]  // Вс=0, Вт=2, Чт=4, Сб=6
+        };
+
+        // База данных спорта с адаптивными тренировками
         const SPORTS_DATABASE = {
             football: {
                 id: 'football',
@@ -1709,58 +2076,70 @@
                 description: 'Командная игра, кардио, выносливость',
                 icon: '<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2"/><path d="M20 8V32M32 20H8M28 12L12 28M28 28L12 12" stroke="currentColor" stroke-width="2"/></svg>',
                 category: 'team',
-                recommendations: {
-                    morning: [
-                        'Бег с ускорениями 4x100м',
-                        'Прыжки на тумбу 3x10',
-                        'Растяжка ног и тазобедренных суставов'
-                    ],
-                    day: [
-                        'Техническая работа с мячом 45 мин',
-                        'Игровые упражнения 2 на 2',
-                        'Спринтерские рывки 10x20м'
-                    ],
-                    evening: [
-                        'Восстановительный массаж ног',
-                        'Анализ тактических схем',
-                        'Статическая растяжка'
-                    ]
+                activityMultiplier: 1.725,
+                nutritionFormula: {
+                    proteinPerKg: 1.6,
+                    carbsPerKg: 6,
+                    fatPerKg: 1,
+                    calorieSurplus: 0.15
                 },
                 workouts: [
-                    { name: 'Бег с ускорениями', sets: '4-6', reps: '30-40 метров', rest: '90 секунд' },
-                    { name: 'Прыжки на тумбу', sets: '3-4', reps: '10-12 повторений', rest: '60 секунд' },
-                    { name: 'Приседания с весом', sets: '4', reps: '12-15 повторений', rest: '90 секунд' },
-                    { name: 'Выпады с гантелями', sets: '3', reps: '12-15 на каждую ногу', rest: '60 секунд' },
-                    { name: 'Планка с поднятием ноги', sets: '3', reps: '30-45 секунд', rest: '30 секунд' }
+                    { 
+                        name: 'Бег с ускорениями', 
+                        sets: '4-6', 
+                        reps: '30-40 метров', 
+                        rest: '90 секунд',
+                        tip: 'Сосредоточьтесь на максимальном ускорении в первые 10 метров'
+                    },
+                    { 
+                        name: 'Прыжки на тумбу', 
+                        sets: '3-4', 
+                        reps: '10-12 повторений', 
+                        rest: '60 секунд',
+                        tip: 'Приземляйтесь мягко, сгибая колени для амортизации'
+                    },
+                    { 
+                        name: 'Приседания с весом', 
+                        sets: '4', 
+                        reps: '12-15 повторений', 
+                        rest: '90 секунд',
+                        tip: 'Держите спину прямой, колени не выходят за носки'
+                    },
+                    { 
+                        name: 'Выпады с гантелями', 
+                        sets: '3', 
+                        reps: '12-15 на каждую ногу', 
+                        rest: '60 секунд',
+                        tip: 'Делайте широкий шаг для лучшей проработки ягодичных мышц'
+                    },
+                    { 
+                        name: 'Планка с поднятием ноги', 
+                        sets: '3', 
+                        reps: '30-45 секунд', 
+                        rest: '30 секунд',
+                        tip: 'Держите корпус напряженным, избегайте провисания таза'
+                    }
                 ],
-                nutrition: {
-                    calories: '2500-3000 ккал',
-                    protein: '120-150 г',
-                    carbs: '300-400 г',
-                    fat: '70-90 г',
-                    tips: [
-                        'Углеводы за 2 часа до тренировки (овсянка, рис)',
-                        'Белок после тренировки в течение 30 минут (сывороточный протеин)',
-                        'Жиры из орехов и авокадо для здоровья суставов',
-                        'Гидратация: 30-40 мл на кг веса в день'
-                    ]
-                },
                 supplements: [
                     { 
                         name: 'BCAA', 
-                        description: 'Снижает мышечную усталость, ускоряет восстановление после интенсивных тренировок' 
+                        description: 'Снижает мышечную усталость, ускоряет восстановление после интенсивных тренировок',
+                        category: 'recovery'
                     },
                     { 
                         name: 'Электролиты', 
-                        description: 'Восполняют потерю солей при интенсивном потоотделении, предотвращают судороги' 
+                        description: 'Восполняют потерю солей при интенсивном потоотделении, предотвращают судороги',
+                        category: 'energy'
                     },
                     { 
                         name: 'Омега-3', 
-                        description: 'Уменьшает воспаление, поддерживает здоровье суставов и сердечно-сосудистой системы' 
+                        description: 'Уменьшает воспаление, поддерживает здоровье суставов и сердечно-сосудистой системы',
+                        category: 'essential'
                     },
                     { 
                         name: 'Коллаген', 
-                        description: 'Укрепляет связки и суставы, снижает риск травм' 
+                        description: 'Укрепляет связки и суставы, снижает риск травм',
+                        category: 'essential'
                     }
                 ]
             },
@@ -1770,58 +2149,70 @@
                 description: 'Координация, прыжки, скорость',
                 icon: '<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2"/><path d="M20 12V28M12 20H28" stroke="currentColor" stroke-width="2"/><circle cx="20" cy="20" r="6" stroke="currentColor" stroke-width="2"/></svg>',
                 category: 'team',
-                recommendations: {
-                    morning: [
-                        'Прыжковые упражнения: 10 минут',
-                        'Броски с разных точек',
-                        'Скакалка 5 минут'
-                    ],
-                    day: [
-                        'Силовая тренировка: приседания, выпады',
-                        'Дриблинг с сопротивлением',
-                        'Игровые упражнения 3 на 3'
-                    ],
-                    evening: [
-                        'Растяжка и восстановление',
-                        'Просмотр игровых моментов',
-                        'Медитация для концентрации'
-                    ]
+                activityMultiplier: 1.725,
+                nutritionFormula: {
+                    proteinPerKg: 1.7,
+                    carbsPerKg: 5.5,
+                    fatPerKg: 1,
+                    calorieSurplus: 0.15
                 },
                 workouts: [
-                    { name: 'Приседания со штангой', sets: '4', reps: '8-10 повторений', rest: '120 секунд' },
-                    { name: 'Выпады с гантелями', sets: '3', reps: '10-12 на каждую ногу', rest: '90 секунд' },
-                    { name: 'Подъемы на носки', sets: '4', reps: '15-20 повторений', rest: '60 секунд' },
-                    { name: 'Прыжки на тумбу', sets: '4', reps: '8-10 повторений', rest: '90 секунд' },
-                    { name: 'Берпи', sets: '3', reps: '10-12 повторений', rest: '60 секунд' }
+                    { 
+                        name: 'Приседания со штангой', 
+                        sets: '4', 
+                        reps: '8-10 повторений', 
+                        rest: '120 секунд',
+                        tip: 'Опускайтесь до параллели бедер с полом, сохраняя нейтральное положение позвоночника'
+                    },
+                    { 
+                        name: 'Выпады с гантелями', 
+                        sets: '3', 
+                        reps: '10-12 на каждую ногу', 
+                        rest: '90 секунд',
+                        tip: 'Колено передней ноги не должно выходить за носок'
+                    },
+                    { 
+                        name: 'Подъемы на носки', 
+                        sets: '4', 
+                        reps: '15-20 повторений', 
+                        rest: '60 секунд',
+                        tip: 'В верхней точке задержитесь на 1-2 секунды для максимального сокращения икр'
+                    },
+                    { 
+                        name: 'Прыжки на тумбу', 
+                        sets: '4', 
+                        reps: '8-10 повторений', 
+                        rest: '90 секунд',
+                        tip: 'Используйте взмах руками для увеличения высоты прыжка'
+                    },
+                    { 
+                        name: 'Берпи', 
+                        sets: '3', 
+                        reps: '10-12 повторений', 
+                        rest: '60 секунд',
+                        tip: 'Сохраняйте высокий темп, но следите за техникой'
+                    }
                 ],
-                nutrition: {
-                    calories: '2700-3200 ккал',
-                    protein: '130-160 г',
-                    carbs: '350-450 г',
-                    fat: '75-95 г',
-                    tips: [
-                        'Быстрые углеводы перед игрой (банан, энергетический батончик)',
-                        'Белок с каждым приемом пищи для восстановления мышц',
-                        'Антиоксиданты из ягод для уменьшения воспаления',
-                        'Кофеин за 30 минут до игры для повышения концентрации'
-                    ]
-                },
                 supplements: [
                     { 
                         name: 'Креатин', 
-                        description: 'Увеличивает взрывную силу и мощность прыжка, улучшает силовые показатели' 
+                        description: 'Увеличивает взрывную силу и мощность прыжка, улучшает силовые показатели',
+                        category: 'energy'
                     },
                     { 
                         name: 'Бета-аланин', 
-                        description: 'Повышает выносливость, уменьшает мышечную усталость во время интенсивных нагрузок' 
+                        description: 'Повышает выносливость, уменьшает мышечную усталость во время интенсивных нагрузок',
+                        category: 'energy'
                     },
                     { 
                         name: 'Цитруллин малат', 
-                        description: 'Улучшает кровоток и доставку кислорода к мышцам, уменьшает мышечную боль' 
+                        description: 'Улучшает кровоток и доставку кислорода к мышцам, уменьшает мышечную боль',
+                        category: 'recovery'
                     },
                     { 
                         name: 'Витамин С', 
-                        description: 'Укрепляет иммунитет, особенно важно в периоды интенсивных тренировок' 
+                        description: 'Укрепляет иммунитет, особенно важно в периоды интенсивных тренировок',
+                        category: 'essential'
                     }
                 ]
             },
@@ -1831,58 +2222,70 @@
                 description: 'Реакция, команда, прыгучесть',
                 icon: '<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2"/><path d="M12 16L28 24M28 16L12 24M20 10V30" stroke="currentColor" stroke-width="2"/></svg>',
                 category: 'team',
-                recommendations: {
-                    morning: [
-                        'Утренняя разминка с акцентом на плечи',
-                        'Упражнения на реакцию',
-                        'Прыжки на скакалке'
-                    ],
-                    day: [
-                        'Тренировка подач и приема',
-                        'Игровые комбинации',
-                        'Блокирование у сетки'
-                    ],
-                    evening: [
-                        'Восстановительные процедуры',
-                        'Анализ техники',
-                        'Растяжка мышц спины'
-                    ]
+                activityMultiplier: 1.725,
+                nutritionFormula: {
+                    proteinPerKg: 1.6,
+                    carbsPerKg: 5,
+                    fatPerKg: 1,
+                    calorieSurplus: 0.15
                 },
                 workouts: [
-                    { name: 'Жим штанги стоя', sets: '4', reps: '8-10 повторений', rest: '90 секунд' },
-                    { name: 'Тяга штанги к подбородку', sets: '3', reps: '10-12 повторений', rest: '60 секунд' },
-                    { name: 'Прыжки из приседа', sets: '4', reps: '8-10 повторений', rest: '90 секунд' },
-                    { name: 'Отжимания на брусьях', sets: '3', reps: '10-12 повторений', rest: '60 секунд' },
-                    { name: 'Планка с поворотами', sets: '3', reps: '30-45 секунд', rest: '30 секунд' }
+                    { 
+                        name: 'Жим штанги стоя', 
+                        sets: '4', 
+                        reps: '8-10 повторений', 
+                        rest: '90 секунд',
+                        tip: 'Не выгибайте спину, держите корпус напряженным'
+                    },
+                    { 
+                        name: 'Тяга штанги к подбородку', 
+                        sets: '3', 
+                        reps: '10-12 повторений', 
+                        rest: '60 секунд',
+                        tip: 'Локти поднимайте выше плеч для максимальной проработки дельт'
+                    },
+                    { 
+                        name: 'Прыжки из приседа', 
+                        sets: '4', 
+                        reps: '8-10 повторений', 
+                        rest: '90 секунд',
+                        tip: 'Приземляйтесь мягко, сразу уходя в следующий прыжок'
+                    },
+                    { 
+                        name: 'Отжимания на брусьях', 
+                        sets: '3', 
+                        reps: '10-12 повторений', 
+                        rest: '60 секунд',
+                        tip: 'Наклон корпуса вперед смещает нагрузку на грудные мышцы'
+                    },
+                    { 
+                        name: 'Планка с поворотами', 
+                        sets: '3', 
+                        reps: '30-45 секунд', 
+                        rest: '30 секунд',
+                        tip: 'Поворачивайте корпус медленно, контролируя каждое движение'
+                    }
                 ],
-                nutrition: {
-                    calories: '2400-2900 ккал',
-                    protein: '120-150 г',
-                    carbs: '300-380 г',
-                    fat: '65-85 г',
-                    tips: [
-                        'Углеводы средней скорости усвоения за 1.5 часа до тренировки',
-                        'Белок с высоким содержанием лейцина для синтеза мышц',
-                        'Полезные жиры для здоровья суставов и гормонального фона',
-                        'Достаточное количество соли для поддержания электролитного баланса'
-                    ]
-                },
                 supplements: [
                     { 
                         name: 'Глюкозамин + Хондроитин', 
-                        description: 'Поддерживает здоровье суставов, особенно важно для прыжковых видов спорта' 
+                        description: 'Поддерживает здоровье суставов, особенно важно для прыжковых видов спорта',
+                        category: 'essential'
                     },
                     { 
                         name: 'MSM (Метилсульфонилметан)', 
-                        description: 'Уменьшает воспаление в суставах, ускоряет восстановление' 
+                        description: 'Уменьшает воспаление в суставах, ускоряет восстановление',
+                        category: 'recovery'
                     },
                     { 
                         name: 'Магний', 
-                        description: 'Снижает мышечные спазмы, улучшает качество сна и восстановления' 
+                        description: 'Снижает мышечные спазмы, улучшает качество сна и восстановления',
+                        category: 'essential'
                     },
                     { 
                         name: 'Витамин D3', 
-                        description: 'Укрепляет кости, поддерживает иммунную систему, особенно при тренировках в зале' 
+                        description: 'Укрепляет кости, поддерживает иммунную систему, особенно при тренировках в зале',
+                        category: 'essential'
                     }
                 ]
             },
@@ -1895,81 +2298,230 @@
                 goals: {
                     muscle: {
                         name: 'Набор мышечной массы',
-                        workouts: [
-                            { name: 'Жим штанги лежа', sets: '4', reps: '8-10 повторений', rest: '120 секунд' },
-                            { name: 'Приседания со штангой', sets: '4', reps: '8-10 повторений', rest: '120 секунд' },
-                            { name: 'Тяга штанги в наклоне', sets: '4', reps: '8-10 повторений', rest: '120 секунд' },
-                            { name: 'Армейский жим', sets: '3', reps: '8-10 повторений', rest: '90 секунд' },
-                            { name: 'Подтягивания широким хватом', sets: '3', reps: '6-8 повторений', rest: '90 секунд' }
-                        ],
-                        nutrition: {
-                            calories: '3000-3500 ккал',
-                            protein: '150-200 г',
-                            carbs: '400-500 г',
-                            fat: '80-100 г',
-                            tips: [
-                                'Протеиновый коктейль сразу после тренировки',
-                                'Углеводы в течение дня для поддержания энергии',
-                                'Жиры для выработки тестостерона и гормонального здоровья',
-                                'Питание каждые 3-4 часа для постоянного поступления нутриентов'
-                            ]
+                        activityMultiplier: 1.55,
+                        nutritionFormula: {
+                            proteinPerKg: 2.2,
+                            carbsPerKg: 4,
+                            fatPerKg: 1,
+                            calorieSurplus: 0.20
                         },
+                        // Базовые тренировки будут адаптироваться в зависимости от уровня пользователя
+                        baseWorkouts: [
+                            { 
+                                name: 'Жим штанги лежа', 
+                                sets: '4', 
+                                reps: '8-10 повторений', 
+                                rest: '120 секунд',
+                                tip: 'Сводите лопатки, создавая устойчивую опору на скамье',
+                                requiresBarbell: true
+                            },
+                            { 
+                                name: 'Приседания со штангой', 
+                                sets: '4', 
+                                reps: '8-10 повторений', 
+                                rest: '120 секунд',
+                                tip: 'Держите грудь расправленной, смотрите вперед, а не вниз',
+                                requiresBarbell: true
+                            },
+                            { 
+                                name: 'Тяга штанги в наклоне', 
+                                sets: '4', 
+                                reps: '8-10 повторений', 
+                                rest: '120 секунд',
+                                tip: 'Сохраняйте естественный прогиб в пояснице на протяжении всего движения',
+                                requiresBarbell: true
+                            },
+                            { 
+                                name: 'Армейский жим', 
+                                sets: '3', 
+                                reps: '8-10 повторений', 
+                                rest: '90 секунд',
+                                tip: 'В нижней точке штанга должна касаться ключиц, в верхней - полностью выпрямляйте руки',
+                                requiresBarbell: true
+                            },
+                            { 
+                                name: 'Подтягивания широким хватом', 
+                                sets: '3', 
+                                reps: '6-8 повторений', 
+                                rest: '90 секунд',
+                                tip: 'В верхней точке старайтесь коснуться перекладины грудью, а не подбородком',
+                                requiresBarbell: false
+                            }
+                        ],
+                        // Адаптивные тренировки для новичков
+                        adaptiveWorkouts: [
+                            { 
+                                name: 'Жим гантелей лежа', 
+                                sets: '4', 
+                                reps: '10-12 повторений', 
+                                rest: '90 секунд',
+                                tip: 'Используйте гантели для лучшей амплитуды движения',
+                                adaptiveNote: 'Вместо штанги используйте гантели'
+                            },
+                            { 
+                                name: 'Приседания с собственным весом + выпрыгивания', 
+                                sets: '4', 
+                                reps: '15-20 повторений', 
+                                rest: '60 секунд',
+                                tip: 'После каждого приседа делайте максимально высокий прыжок',
+                                adaptiveNote: 'Адаптировано для новичков вместо штанги'
+                            },
+                            { 
+                                name: 'Тяга гантелей в наклоне', 
+                                sets: '4', 
+                                reps: '10-12 повторений', 
+                                rest: '90 секунд',
+                                tip: 'Держите спину параллельно полу, тяните гантели к поясу',
+                                adaptiveNote: 'Используйте гантели вместо штанги'
+                            },
+                            { 
+                                name: 'Жим гантелей стоя', 
+                                sets: '3', 
+                                reps: '10-12 повторений', 
+                                rest: '60 секунд',
+                                tip: 'Начинайте с легких гантелей, фокусируйтесь на технике',
+                                adaptiveNote: 'Адаптированная версия армейского жима'
+                            },
+                            { 
+                                name: 'Австралийские подтягивания', 
+                                sets: '3', 
+                                reps: '10-15 повторений', 
+                                rest: '60 секунд',
+                                tip: 'Чем выше перекладина, тем легче выполнять упражнение',
+                                adaptiveNote: 'Для тех, кто не может подтягиваться'
+                            }
+                        ],
                         supplements: [
                             { 
                                 name: 'Сывороточный протеин', 
-                                description: 'Быстро усваиваемый белок для синтеза мышц после тренировки' 
+                                description: 'Быстро усваиваемый белок для синтеза мышц после тренировки',
+                                category: 'essential'
                             },
                             { 
                                 name: 'Креатин моногидрат', 
-                                description: 'Увеличивает силу, мощность и мышечную массу, улучшает гидратацию клеток' 
+                                description: 'Увеличивает силу, мощность и мышечную массу, улучшает гидратацию клеток',
+                                category: 'energy'
                             },
                             { 
                                 name: 'BCAA', 
-                                description: 'Снижает катаболизм, ускоряет восстановление между тренировками' 
+                                description: 'Снижает катаболизм, ускоряет восстановление между тренировками',
+                                category: 'recovery'
                             },
                             { 
                                 name: 'Цинк + Магний + B6 (ZMA)', 
-                                description: 'Улучшает качество сна, повышает уровень тестостерона' 
+                                description: 'Улучшает качество сна, повышает уровень тестостерона',
+                                category: 'recovery'
                             }
                         ]
                     },
                     shape: {
                         name: 'Форма и рельеф',
-                        workouts: [
-                            { name: 'Суперсет: бицепс + трицепс', sets: '3', reps: '12-15 повторений', rest: '60 секунд' },
-                            { name: 'Кардио на беговой дорожке', sets: '1', reps: '30-40 минут', rest: '0' },
-                            { name: 'Планка с вариациями', sets: '3', reps: '60 секунд', rest: '30 секунд' },
-                            { name: 'Выпады с гантелями', sets: '3', reps: '12-15 на каждую ногу', rest: '60 секунд' },
-                            { name: 'Жим гантелей на наклонной скамье', sets: '3', reps: '12-15 повторений', rest: '60 секунд' }
-                        ],
-                        nutrition: {
-                            calories: '2000-2500 ккал',
-                            protein: '120-150 г',
-                            carbs: '200-250 г',
-                            fat: '50-70 г',
-                            tips: [
-                                'Контроль углеводов во второй половине дня',
-                                'Больше овощей для клетчатки и насыщения',
-                                'Дробное питание 5-6 раз в день для контроля аппетита',
-                                'Достаточное количество воды для подавления аппетита и метаболизма'
-                            ]
+                        activityMultiplier: 1.55,
+                        nutritionFormula: {
+                            proteinPerKg: 2.2,
+                            carbsPerKg: 2.5,
+                            fatPerKg: 0.8,
+                            calorieSurplus: 0
                         },
+                        baseWorkouts: [
+                            { 
+                                name: 'Суперсет: бицепс + трицепс', 
+                                sets: '3', 
+                                reps: '12-15 повторений', 
+                                rest: '60 секунд',
+                                tip: 'Выполняйте упражнения на бицепс и трицепс без отдыха между ними',
+                                requiresBarbell: false
+                            },
+                            { 
+                                name: 'Кардио на беговой дорожке', 
+                                sets: '1', 
+                                reps: '30-40 минут', 
+                                rest: '0',
+                                tip: 'Поддерживайте пульс в зоне 60-70% от максимального',
+                                requiresBarbell: false
+                            },
+                            { 
+                                name: 'Планка с вариациями', 
+                                sets: '3', 
+                                reps: '60 секунд', 
+                                rest: '30 секунд',
+                                tip: 'Чередуйте классическую планку, боковую и планку с поднятием ноги',
+                                requiresBarbell: false
+                            },
+                            { 
+                                name: 'Выпады с гантелями', 
+                                sets: '3', 
+                                reps: '12-15 на каждую ногу', 
+                                rest: '60 секунд',
+                                tip: 'Сделайте паузу в нижней точке для максимального растяжения мышц',
+                                requiresBarbell: false
+                            },
+                            { 
+                                name: 'Жим гантелей на наклонной скамье', 
+                                sets: '3', 
+                                reps: '12-15 повторений', 
+                                rest: '60 секунд',
+                                tip: 'Угол наклона 30-45 градусов лучше всего прорабатывает верх груди',
+                                requiresBarbell: false
+                            }
+                        ],
+                        adaptiveWorkouts: [
+                            { 
+                                name: 'Суперсет: бицепс + трицепс', 
+                                sets: '3', 
+                                reps: '12-15 повторений', 
+                                rest: '60 секунд',
+                                tip: 'Начните с легких весов, фокусируйтесь на ощущении работы мышц'
+                            },
+                            { 
+                                name: 'Кардио на беговой дорожке', 
+                                sets: '1', 
+                                reps: '30-40 минут', 
+                                rest: '0',
+                                tip: 'Начните с ходьбы, постепенно увеличивая скорость'
+                            },
+                            { 
+                                name: 'Планка с вариациями', 
+                                sets: '3', 
+                                reps: '60 секунд', 
+                                rest: '30 секунд',
+                                tip: 'Если сложно - начните с 30 секунд и постепенно увеличивайте время'
+                            },
+                            { 
+                                name: 'Выпады с гантелями', 
+                                sets: '3', 
+                                reps: '12-15 на каждую ногу', 
+                                rest: '60 секунд',
+                                tip: 'Начните без веса, затем добавьте легкие гантели'
+                            },
+                            { 
+                                name: 'Жим гантелей на наклонной скамье', 
+                                sets: '3', 
+                                reps: '12-15 повторений', 
+                                rest: '60 секунд',
+                                tip: 'Начните с легких гантелей, постепенно увеличивайте вес'
+                            }
+                        ],
                         supplements: [
                             { 
                                 name: 'L-карнитин', 
-                                description: 'Помогает транспортировать жирные кислоты в митохондрии для сжигания' 
+                                description: 'Помогает транспортировать жирные кислоты в митохондрии для сжигания',
+                                category: 'energy'
                             },
                             { 
                                 name: 'Зеленый чай экстракт', 
-                                description: 'Ускоряет метаболизм, обладает антиоксидантными свойствами' 
+                                description: 'Ускоряет метаболизм, обладает антиоксидантными свойствами',
+                                category: 'essential'
                             },
                             { 
                                 name: 'Омега-3', 
-                                description: 'Снижает воспаление, улучшает чувствительность к инсулину' 
+                                description: 'Снижает воспаление, улучшает чувствительность к инсулину',
+                                category: 'essential'
                             },
                             { 
                                 name: 'Витаминно-минеральный комплекс', 
-                                description: 'Восполняет дефициты при снижении калорийности рациона' 
+                                description: 'Восполняет дефициты при снижении калорийности рациона',
+                                category: 'essential'
                             }
                         ]
                     }
@@ -1987,55 +2539,148 @@
                     hasCompletedOnboarding: false,
                     theme: 'dark',
                     currentSportDetails: null,
-                    currentGymGoal: 'muscle'
+                    currentGymGoal: 'muscle',
+                    lastWorkoutDate: null,
+                    todayWorkoutCompleted: false,
+                    workoutHistory: {}, // История тренировок по датам
+                    calendarCurrentMonth: new Date().getMonth(),
+                    calendarCurrentYear: new Date().getFullYear()
                 };
                 
                 this.currentOnboardingStep = 1;
                 this.reactionTest = null;
                 this.reactionTimeouts = [];
+                this.isTelegram = isTelegramApp;
                 
                 this.init();
             }
             
-            init() {
-                this.loadState();
+            async init() {
+                // Инициализация Telegram WebApp
+                if (this.isTelegram) {
+                    window.Telegram.WebApp.ready();
+                    window.Telegram.WebApp.expand();
+                }
+                
+                // Загрузка данных из CloudStorage или localStorage
+                await this.loadState();
                 this.checkOnboarding();
                 this.setupEventListeners();
                 this.initTimeBasedContent();
+                this.checkWorkoutStatus();
+                this.initMiniCalendar();
             }
             
-            loadState() {
-                try {
-                    const saved = localStorage.getItem('sportAIState');
-                    if (saved) {
-                        const parsed = JSON.parse(saved);
-                        this.state = { ...this.state, ...parsed };
+            // Асинхронное сохранение данных в Telegram CloudStorage или localStorage
+            async saveState() {
+                const stateString = JSON.stringify(this.state);
+                
+                if (this.isTelegram) {
+                    try {
+                        // Сохраняем в Telegram CloudStorage
+                        await window.Telegram.WebApp.CloudStorage.setItem('sportAIState', stateString);
+                        console.log('Данные сохранены в Telegram CloudStorage');
+                    } catch (error) {
+                        console.error('Ошибка сохранения в Telegram CloudStorage:', error);
+                        // Fallback на localStorage
+                        localStorage.setItem('sportAIState', stateString);
                     }
-                } catch (e) {
-                    console.error('Ошибка загрузки:', e);
+                } else {
+                    // Fallback на localStorage для браузера
+                    localStorage.setItem('sportAIState', stateString);
+                    localStorage.setItem('user_tested', 'true');
                 }
             }
             
-            saveState() {
-                localStorage.setItem('sportAIState', JSON.stringify(this.state));
-                localStorage.setItem('user_tested', 'true');
+            // Асинхронная загрузка данных из Telegram CloudStorage или localStorage
+            async loadState() {
+                try {
+                    let savedData = null;
+                    
+                    if (this.isTelegram) {
+                        // Пытаемся загрузить из Telegram CloudStorage
+                        const cloudData = await window.Telegram.WebApp.CloudStorage.getItem('sportAIState');
+                        if (cloudData) {
+                            savedData = JSON.parse(cloudData);
+                            console.log('Данные загружены из Telegram CloudStorage');
+                        }
+                    }
+                    
+                    // Если в CloudStorage нет данных, пробуем localStorage
+                    if (!savedData) {
+                        const localData = localStorage.getItem('sportAIState');
+                        if (localData) {
+                            savedData = JSON.parse(localData);
+                            console.log('Данные загружены из localStorage');
+                        }
+                    }
+                    
+                    if (savedData) {
+                        // Мерджим состояния, сохраняя новые поля
+                        this.state = { 
+                            ...this.state, 
+                            ...savedData,
+                            // Убедимся, что новые поля инициализированы
+                            workoutHistory: savedData.workoutHistory || {},
+                            calendarCurrentMonth: savedData.calendarCurrentMonth !== undefined ? 
+                                savedData.calendarCurrentMonth : new Date().getMonth(),
+                            calendarCurrentYear: savedData.calendarCurrentYear !== undefined ? 
+                                savedData.calendarCurrentYear : new Date().getFullYear()
+                        };
+                    }
+                } catch (e) {
+                    console.error('Ошибка загрузки данных:', e);
+                }
             }
             
             checkOnboarding() {
-                const userTested = localStorage.getItem('user_tested');
-                this.state.hasCompletedOnboarding = !!userTested;
-                
-                if (!this.state.hasCompletedOnboarding) {
-                    document.getElementById('onboarding').classList.remove('hidden');
-                    document.getElementById('mainApp').classList.add('d-none');
-                    this.showOnboardingStep(1);
-                } else {
+                if (this.state.hasCompletedOnboarding) {
                     document.getElementById('onboarding').classList.add('hidden');
                     document.getElementById('mainApp').classList.remove('d-none');
                     this.updateHomeContent();
                     this.updateProfile();
                     this.updateSportsGrid();
+                } else {
+                    document.getElementById('onboarding').classList.remove('hidden');
+                    document.getElementById('mainApp').classList.add('d-none');
+                    this.showOnboardingStep(1);
                 }
+            }
+            
+            checkWorkoutStatus() {
+                const today = new Date().toDateString();
+                if (this.state.lastWorkoutDate === today) {
+                    this.state.todayWorkoutCompleted = true;
+                } else {
+                    this.state.todayWorkoutCompleted = false;
+                }
+            }
+            
+            markWorkoutToday() {
+                const today = new Date();
+                const todayString = today.toDateString();
+                
+                // Сохраняем дату последней тренировки
+                this.state.lastWorkoutDate = todayString;
+                this.state.todayWorkoutCompleted = true;
+                
+                // Добавляем в историю тренировок
+                if (!this.state.workoutHistory[todayString]) {
+                    this.state.workoutHistory[todayString] = {
+                        date: todayString,
+                        sport: this.state.currentSportDetails,
+                        completed: true
+                    };
+                }
+                
+                this.saveState();
+                
+                // Обновляем вечерние рекомендации и календарь
+                this.updateTimeBasedContent();
+                this.initMiniCalendar();
+                
+                alert('Тренировка отмечена! Рекомендации обновлены.');
+                this.closeSportDetails();
             }
             
             setupEventListeners() {
@@ -2126,6 +2771,86 @@
                 return true;
             }
             
+            // Метод расчета BMR по формуле Миффлина-Сан Жеора
+            calculateBMR() {
+                const { age, gender, height, weight } = this.state.userData;
+                
+                if (!age || !gender || !height || !weight) {
+                    return null;
+                }
+                
+                if (gender === 'male') {
+                    return (10 * weight) + (6.25 * height) - (5 * age) + 5;
+                } else {
+                    return (10 * weight) + (6.25 * height) - (5 * age) - 161;
+                }
+            }
+            
+            // Расчет TDEE с учетом уровня активности
+            calculateTDEE(activityMultiplier = 1.55) {
+                const bmr = this.calculateBMR();
+                if (!bmr) return null;
+                
+                return Math.round(bmr * activityMultiplier);
+            }
+            
+            // Расчет калорий для конкретного вида спорта
+            calculateSportCalories(sportId, goal = null) {
+                const tdee = this.calculateTDEE();
+                if (!tdee) return null;
+                
+                let sportData = SPORTS_DATABASE[sportId];
+                
+                if (!sportData) return null;
+                
+                let formula;
+                let activityMultiplier;
+                
+                if (sportId === 'gym' && goal) {
+                    formula = sportData.goals[goal].nutritionFormula;
+                    activityMultiplier = sportData.goals[goal].activityMultiplier;
+                } else {
+                    formula = sportData.nutritionFormula;
+                    activityMultiplier = sportData.activityMultiplier;
+                }
+                
+                if (!formula) return null;
+                
+                const adjustedTDEE = this.calculateTDEE(activityMultiplier);
+                const calories = Math.round(adjustedTDEE * (1 + formula.calorieSurplus));
+                
+                return {
+                    calories: calories,
+                    protein: Math.round(formula.proteinPerKg * this.state.userData.weight),
+                    carbs: Math.round(formula.carbsPerKg * this.state.userData.weight),
+                    fat: Math.round(formula.fatPerKg * this.state.userData.weight)
+                };
+            }
+            
+            // Расчет рекомендуемого веса гантелей
+            calculateDumbbellWeight() {
+                if (!this.state.userData.weight) return null;
+                
+                // Берем 10% от веса тела, округляем до ближайших 2 кг
+                const weight = this.state.userData.weight * 0.1;
+                const rounded = Math.round(weight / 2) * 2;
+                
+                // Минимальный вес 4 кг, максимальный 20 кг для безопасности
+                return Math.max(4, Math.min(20, rounded));
+            }
+            
+            // Проверка уровня силы для адаптации тренировок
+            isBeginnerLevel() {
+                const bodyweight = this.state.testResults.bodyweight;
+                if (!bodyweight) return true;
+                
+                // Если подтягиваний 0-5 или вес меньше 65 кг - считаем новичком
+                const isLowStrength = bodyweight.pullups <= 5;
+                const isLowWeight = this.state.userData.weight < 65;
+                
+                return isLowStrength || isLowWeight;
+            }
+            
             startReactionTest() {
                 this.clearAllTimeouts();
                 
@@ -2165,7 +2890,7 @@
                 const target = document.createElement('div');
                 target.className = 'reaction-target';
                 
-                const margin = 40;
+                const margin = 30;
                 const x = margin + Math.random() * (area.offsetWidth - margin * 2);
                 const y = margin + Math.random() * (area.offsetHeight - margin * 2);
                 
@@ -2223,7 +2948,7 @@
                 this.clearAllTimeouts();
                 
                 document.getElementById('reactionArea').innerHTML = 
-                    '<div class="text-center" style="margin-top: 100px; color: var(--text-tertiary);">Тест завершен!</div>';
+                    '<div class="text-center" style="margin-top: 80px; color: var(--text-tertiary); font-size: var(--font-sm);">Тест завершен!</div>';
                 
                 this.state.testResults.reaction = this.reactionTest.times;
                 this.saveState();
@@ -2287,7 +3012,7 @@
                 document.getElementById('fitnessDescription').textContent = description;
             }
             
-            completeOnboarding() {
+            async completeOnboarding() {
                 this.state.testResults.bodyweight = {
                     pushups: parseInt(document.getElementById('pushups').value) || 0,
                     plank: parseInt(document.getElementById('plank').value) || 0,
@@ -2298,8 +3023,7 @@
                 this.calculateFitnessLevel();
                 this.state.hasCompletedOnboarding = true;
                 
-                localStorage.setItem('user_tested', 'true');
-                this.saveState();
+                await this.saveState();
                 
                 document.getElementById('onboarding').classList.add('hidden');
                 document.getElementById('mainApp').classList.remove('d-none');
@@ -2307,6 +3031,7 @@
                 this.updateHomeContent();
                 this.updateProfile();
                 this.updateSportsGrid();
+                this.initMiniCalendar();
             }
             
             initTimeBasedContent() {
@@ -2364,6 +3089,15 @@
                     'Разминка 10-15 минут перед основной активностью',
                     'Восстановление и растяжка после тренировки'
                 ];
+                
+                // Динамическая вечерняя рекомендация
+                if (period === 'evening') {
+                    if (this.state.todayWorkoutCompleted) {
+                        tips.push('Примите магний для улучшения качества сна и восстановления');
+                    } else {
+                        tips.push('Сделайте легкую растяжку для расслабления мышц');
+                    }
+                }
                 
                 tips.forEach(tip => {
                     html += `
@@ -2426,7 +3160,7 @@
                                 <div class="sport-name">${favoriteSport.name}</div>
                                 <div class="sport-desc">${favoriteSport.description}</div>
                             </div>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </div>
@@ -2480,7 +3214,7 @@
                 return null;
             }
             
-            toggleFavorite(sportId) {
+            async toggleFavorite(sportId) {
                 const index = this.state.favorites.indexOf(sportId);
                 
                 if (index > -1) {
@@ -2494,7 +3228,7 @@
                     }
                 }
                 
-                this.saveState();
+                await this.saveState();
                 this.updateSportsGrid();
                 this.updateHomeContent();
             }
@@ -2527,112 +3261,490 @@
             }
             
             updateRegularSportDetails(sport) {
+                // Расчет калорий
+                const nutritionData = this.calculateSportCalories(sport.id);
+                
                 // Тренировки
                 const workoutList = document.getElementById('workoutList');
                 workoutList.innerHTML = sport.workouts.map(workout => `
                     <li class="workout-item">
-                        <div class="workout-name">${workout.name}</div>
-                        <div class="workout-details">
-                            Подходы: ${workout.sets} | Повторения: ${workout.reps} | Отдых: ${workout.rest}
+                        <div class="workout-header">
+                            <div class="workout-name">${workout.name}</div>
                         </div>
+                        <div class="workout-details">
+                            <span class="workout-detail-item">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M8 12H16M12 8V16" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                                Подходы: ${workout.sets}
+                            </span>
+                            <span class="workout-detail-item">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 8V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                                Повторения: ${workout.reps}
+                            </span>
+                            <span class="workout-detail-item">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 20V10M8 20V14M16 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                Отдых: ${workout.rest}
+                            </span>
+                        </div>
+                        ${workout.tip ? `<div class="workout-tip">💡 ${workout.tip}</div>` : ''}
                     </li>
                 `).join('');
                 
                 // Питание
                 const nutritionGrid = document.getElementById('nutritionGrid');
-                nutritionGrid.innerHTML = `
-                    <div class="nutrition-item">
-                        <div class="nutrition-value">${sport.nutrition.calories}</div>
-                        <div class="nutrition-label">Калории</div>
-                    </div>
-                    <div class="nutrition-item">
-                        <div class="nutrition-value">${sport.nutrition.protein}</div>
-                        <div class="nutrition-label">Белок</div>
-                    </div>
-                    <div class="nutrition-item">
-                        <div class="nutrition-value">${sport.nutrition.carbs}</div>
-                        <div class="nutrition-label">Углеводы</div>
-                    </div>
-                    <div class="nutrition-item">
-                        <div class="nutrition-value">${sport.nutrition.fat}</div>
-                        <div class="nutrition-label">Жиры</div>
-                    </div>
-                `;
+                if (nutritionData) {
+                    nutritionGrid.innerHTML = `
+                        <div class="nutrition-item">
+                            <div class="nutrition-value">${nutritionData.calories} ккал</div>
+                            <div class="nutrition-label">Калории</div>
+                            <div class="nutrition-dynamic-note">Рассчитано под ваш вес</div>
+                        </div>
+                        <div class="nutrition-item">
+                            <div class="nutrition-value">${nutritionData.protein} г</div>
+                            <div class="nutrition-label">Белок</div>
+                            <div class="nutrition-dynamic-note">${sport.nutritionFormula.proteinPerKg} г/кг</div>
+                        </div>
+                        <div class="nutrition-item">
+                            <div class="nutrition-value">${nutritionData.carbs} г</div>
+                            <div class="nutrition-label">Углеводы</div>
+                            <div class="nutrition-dynamic-note">${sport.nutritionFormula.carbsPerKg} г/кг</div>
+                        </div>
+                        <div class="nutrition-item">
+                            <div class="nutrition-value">${nutritionData.fat} г</div>
+                            <div class="nutrition-label">Жиры</div>
+                            <div class="nutrition-dynamic-note">${sport.nutritionFormula.fatPerKg} г/кг</div>
+                        </div>
+                    `;
+                }
                 
                 // Советы по питанию
                 const nutritionTips = document.getElementById('nutritionTips');
+                const tips = [
+                    'Углеводы за 2 часа до тренировки (овсянка, рис)',
+                    'Белок после тренировки в течение 30 минут (сывороточный протеин)',
+                    'Жиры из орехов и авокадо для здоровья суставов',
+                    `Гидратация: ${Math.round(this.state.userData.weight * 30)} мл воды в день`
+                ];
+                
                 nutritionTips.innerHTML = `
                     <ul class="workout-list">
-                        ${sport.nutrition.tips.map(tip => `<li class="workout-item" style="border: none; padding: var(--spacing-xs);">${tip}</li>`).join('')}
+                        ${tips.map(tip => `<li class="workout-item" style="border: none; padding: var(--spacing-xs);">${tip}</li>`).join('')}
                     </ul>
                 `;
                 
-                // Добавки
-                const supplementsList = document.getElementById('supplementsList');
-                supplementsList.innerHTML = sport.supplements.map(supplement => `
-                    <li class="supplement-item">
-                        <div class="supplement-name">${supplement.name}</div>
-                        <div class="supplement-desc">${supplement.description}</div>
-                    </li>
-                `).join('');
+                // Добавки (группировка по категориям)
+                this.updateSupplementsByCategory(sport.supplements);
             }
             
             updateGymDetails(sport, goal) {
                 const goalData = sport.goals[goal];
+                const isBeginner = this.isBeginnerLevel();
+                const dumbbellWeight = this.calculateDumbbellWeight();
+                
+                // Выбираем тренировки в зависимости от уровня
+                const workouts = isBeginner ? goalData.adaptiveWorkouts : goalData.baseWorkouts;
+                
+                // Расчет калорий
+                const nutritionData = this.calculateSportCalories('gym', goal);
                 
                 // Тренировки
                 const workoutList = document.getElementById('workoutList');
-                workoutList.innerHTML = goalData.workouts.map(workout => `
-                    <li class="workout-item">
-                        <div class="workout-name">${workout.name}</div>
-                        <div class="workout-details">
-                            Подходы: ${workout.sets} | Повторения: ${workout.reps} | Отдых: ${workout.rest}
-                        </div>
-                    </li>
-                `).join('');
+                workoutList.innerHTML = workouts.map(workout => {
+                    let workoutHtml = `
+                        <li class="workout-item">
+                            <div class="workout-header">
+                                <div class="workout-name">${workout.name}</div>
+                            </div>
+                            <div class="workout-details">
+                                <span class="workout-detail-item">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M8 12H16M12 8V16" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    Подходы: ${workout.sets}
+                                </span>
+                                <span class="workout-detail-item">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 8V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    Повторения: ${workout.reps}
+                                </span>
+                                <span class="workout-detail-item">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 20V10M8 20V14M16 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                    Отдых: ${workout.rest}
+                                </span>
+                            </div>
+                    `;
+                    
+                    // Добавляем совет по выполнению
+                    if (workout.tip) {
+                        workoutHtml += `<div class="workout-tip">💡 ${workout.tip}</div>`;
+                    }
+                    
+                    // Добавляем адаптивную заметку для новичков
+                    if (isBeginner && workout.adaptiveNote) {
+                        workoutHtml += `<div class="adaptive-note">⚡ ${workout.adaptiveNote}</div>`;
+                    }
+                    
+                    // Добавляем расчет веса гантелей для упражнений с гантелями
+                    if (dumbbellWeight && workout.name.includes('гантел') && isBeginner) {
+                        workoutHtml += `<div class="adaptive-note">🏋️ Используйте гантели по <span class="dumbbell-weight">${dumbbellWeight} кг</span> (10% от вашего веса)</div>`;
+                    }
+                    
+                    workoutHtml += `</li>`;
+                    return workoutHtml;
+                }).join('');
                 
                 // Питание
                 const nutritionGrid = document.getElementById('nutritionGrid');
-                nutritionGrid.innerHTML = `
-                    <div class="nutrition-item">
-                        <div class="nutrition-value">${goalData.nutrition.calories}</div>
-                        <div class="nutrition-label">Калории</div>
-                    </div>
-                    <div class="nutrition-item">
-                        <div class="nutrition-value">${goalData.nutrition.protein}</div>
-                        <div class="nutrition-label">Белок</div>
-                    </div>
-                    <div class="nutrition-item">
-                        <div class="nutrition-value">${goalData.nutrition.carbs}</div>
-                        <div class="nutrition-label">Углеводы</div>
-                    </div>
-                    <div class="nutrition-item">
-                        <div class="nutrition-value">${goalData.nutrition.fat}</div>
-                        <div class="nutrition-label">Жиры</div>
-                    </div>
-                `;
+                if (nutritionData) {
+                    nutritionGrid.innerHTML = `
+                        <div class="nutrition-item">
+                            <div class="nutrition-value">${nutritionData.calories} ккал</div>
+                            <div class="nutrition-label">Калории</div>
+                            <div class="nutrition-dynamic-note">TDEE + ${goalData.nutritionFormula.calorieSurplus * 100}%</div>
+                        </div>
+                        <div class="nutrition-item">
+                            <div class="nutrition-value">${nutritionData.protein} г</div>
+                            <div class="nutrition-label">Белок</div>
+                            <div class="nutrition-dynamic-note">${goalData.nutritionFormula.proteinPerKg} г/кг</div>
+                        </div>
+                        <div class="nutrition-item">
+                            <div class="nutrition-value">${nutritionData.carbs} г</div>
+                            <div class="nutrition-label">Углеводы</div>
+                            <div class="nutrition-dynamic-note">${goalData.nutritionFormula.carbsPerKg} г/кг</div>
+                        </div>
+                        <div class="nutrition-item">
+                            <div class="nutrition-value">${nutritionData.fat} г</div>
+                            <div class="nutrition-label">Жиры</div>
+                            <div class="nutrition-dynamic-note">${goalData.nutritionFormula.fatPerKg} г/кг</div>
+                        </div>
+                    `;
+                }
                 
                 // Советы по питанию
                 const nutritionTips = document.getElementById('nutritionTips');
+                const tips = goal === 'muscle' ? [
+                    'Протеиновый коктейль сразу после тренировки',
+                    'Углеводы в течение дня для поддержания энергии',
+                    'Жиры для выработки тестостерона и гормонального здоровья',
+                    'Питание каждые 3-4 часа для постоянного поступления нутриентов'
+                ] : [
+                    'Контроль углеводов во второй половине дня',
+                    'Больше овощей для клетчатки и насыщения',
+                    'Дробное питание 5-6 раз в день для контроля аппетита',
+                    'Достаточное количество воды для подавления аппетита и метаболизма'
+                ];
+                
                 nutritionTips.innerHTML = `
                     <ul class="workout-list">
-                        ${goalData.nutrition.tips.map(tip => `<li class="workout-item" style="border: none; padding: var(--spacing-xs);">${tip}</li>`).join('')}
+                        ${tips.map(tip => `<li class="workout-item" style="border: none; padding: var(--spacing-xs);">${tip}</li>`).join('')}
                     </ul>
                 `;
                 
-                // Добавки
-                const supplementsList = document.getElementById('supplementsList');
-                supplementsList.innerHTML = goalData.supplements.map(supplement => `
-                    <li class="supplement-item">
-                        <div class="supplement-name">${supplement.name}</div>
-                        <div class="supplement-desc">${supplement.description}</div>
-                    </li>
-                `).join('');
+                // Добавки (группировка по категориям)
+                this.updateSupplementsByCategory(goalData.supplements);
+            }
+            
+            updateSupplementsByCategory(supplements) {
+                const container = document.getElementById('supplementsCategories');
+                
+                // Группировка добавок по категориям
+                const categories = {
+                    essential: { title: 'Основное', icon: '⭐', supplements: [] },
+                    energy: { title: 'Для энергии', icon: '⚡', supplements: [] },
+                    recovery: { title: 'Для восстановления', icon: '🔄', supplements: [] }
+                };
+                
+                supplements.forEach(supplement => {
+                    if (categories[supplement.category]) {
+                        categories[supplement.category].supplements.push(supplement);
+                    } else {
+                        categories.essential.supplements.push(supplement);
+                    }
+                });
+                
+                // Рендеринг категорий
+                container.innerHTML = '';
+                
+                Object.entries(categories).forEach(([categoryId, category]) => {
+                    if (category.supplements.length === 0) return;
+                    
+                    const categoryHtml = `
+                        <div class="supplement-category">
+                            <div class="category-header">
+                                <div class="category-icon">${category.icon}</div>
+                                <div class="category-title">${category.title}</div>
+                            </div>
+                            <ul class="supplements-list">
+                                ${category.supplements.map(supplement => `
+                                    <li class="supplement-item">
+                                        <div class="supplement-name">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                                <path d="M12 8V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                            </svg>
+                                            ${supplement.name}
+                                        </div>
+                                        <div class="supplement-desc">${supplement.description}</div>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    `;
+                    
+                    container.innerHTML += categoryHtml;
+                });
             }
             
             closeSportDetails() {
                 document.getElementById('sportDetailsModal').classList.remove('active');
                 this.state.currentSportDetails = null;
+            }
+            
+            // Инициализация мини-календаря
+            initMiniCalendar() {
+                const monthNames = [
+                    'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+                    'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+                ];
+                
+                const dayNames = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+                
+                const today = new Date();
+                const currentMonth = this.state.calendarCurrentMonth;
+                const currentYear = this.state.calendarCurrentYear;
+                
+                // Обновляем заголовок календаря
+                document.getElementById('calendarMonthTitle').textContent = 
+                    `${monthNames[currentMonth]} ${currentYear}`;
+                
+                // Получаем первый день месяца и количество дней
+                const firstDay = new Date(currentYear, currentMonth, 1);
+                const lastDay = new Date(currentYear, currentMonth + 1, 0);
+                const daysInMonth = lastDay.getDate();
+                const startingDay = firstDay.getDay(); // 0 = Воскресенье
+                
+                // Создаем сетку календаря
+                let calendarHTML = '';
+                
+                // Заголовки дней недели
+                dayNames.forEach(day => {
+                    calendarHTML += `<div class="calendar-day-header">${day}</div>`;
+                });
+                
+                // Пустые ячейки перед первым днем месяца
+                for (let i = 0; i < startingDay; i++) {
+                    calendarHTML += `<div class="calendar-day other-month"></div>`;
+                }
+                
+                // Дни месяца
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const date = new Date(currentYear, currentMonth, day);
+                    const dayOfWeek = date.getDay();
+                    const dateString = date.toDateString();
+                    
+                    let dayClass = 'calendar-day';
+                    let isToday = false;
+                    let isWorkoutDay = false;
+                    let isRestDay = false;
+                    let hasWorkout = false;
+                    
+                    // Проверяем, сегодня ли это
+                    if (date.getDate() === today.getDate() && 
+                        date.getMonth() === today.getMonth() && 
+                        date.getFullYear() === today.getFullYear()) {
+                        dayClass += ' today';
+                        isToday = true;
+                    }
+                    
+                    // Проверяем, тренировочный ли это день
+                    if (TRAINING_SCHEDULE.workoutDays.includes(dayOfWeek)) {
+                        dayClass += ' workout';
+                        isWorkoutDay = true;
+                    } else if (TRAINING_SCHEDULE.restDays.includes(dayOfWeek)) {
+                        dayClass += ' rest';
+                        isRestDay = true;
+                    }
+                    
+                    // Проверяем, есть ли запись о тренировке в этот день
+                    if (this.state.workoutHistory[dateString]) {
+                        hasWorkout = true;
+                    }
+                    
+                    // Добавляем индикатор выполненной тренировки
+                    let indicator = '';
+                    if (hasWorkout) {
+                        indicator = ' ✓';
+                    }
+                    
+                    calendarHTML += `
+                        <div class="${dayClass}" 
+                             data-day="${day}" 
+                             data-month="${currentMonth}" 
+                             data-year="${currentYear}"
+                             onclick="SportAI.showDayInfo(${day}, ${currentMonth}, ${currentYear})">
+                            ${day}${indicator}
+                        </div>
+                    `;
+                }
+                
+                // Оставшиеся пустые ячейки
+                const totalCells = 42; // 6 строк * 7 дней
+                const filledCells = startingDay + daysInMonth;
+                const remainingCells = totalCells - filledCells;
+                
+                for (let i = 0; i < remainingCells; i++) {
+                    calendarHTML += `<div class="calendar-day other-month"></div>`;
+                }
+                
+                document.getElementById('miniCalendar').innerHTML = calendarHTML;
+            }
+            
+            // Смена месяца в календаре
+            changeCalendarMonth(direction) {
+                let newMonth = this.state.calendarCurrentMonth + direction;
+                let newYear = this.state.calendarCurrentYear;
+                
+                if (newMonth < 0) {
+                    newMonth = 11;
+                    newYear--;
+                } else if (newMonth > 11) {
+                    newMonth = 0;
+                    newYear++;
+                }
+                
+                this.state.calendarCurrentMonth = newMonth;
+                this.state.calendarCurrentYear = newYear;
+                
+                this.saveState();
+                this.initMiniCalendar();
+            }
+            
+            // Показать информацию о дне
+            showDayInfo(day, month, year) {
+                const date = new Date(year, month, day);
+                const dateString = date.toDateString();
+                const dayOfWeek = date.getDay();
+                const dayNames = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+                const monthNames = [
+                    'Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня',
+                    'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'
+                ];
+                
+                const dayName = dayNames[dayOfWeek];
+                const monthName = monthNames[month];
+                
+                // Проверяем, тренировочный ли это день
+                const isWorkoutDay = TRAINING_SCHEDULE.workoutDays.includes(dayOfWeek);
+                const hasWorkout = this.state.workoutHistory[dateString];
+                
+                let dayInfoHTML = '';
+                
+                if (isWorkoutDay) {
+                    // Тренировочный день
+                    dayInfoHTML = `
+                        <div class="calendar-modal-day workout">
+                            <h3 class="calendar-modal-title">${day} ${monthName} - ${dayName}</h3>
+                            <p class="calendar-modal-subtitle">🏋️ Тренировочный день</p>
+                            
+                            ${hasWorkout ? 
+                                `<div style="background: rgba(16, 185, 129, 0.2); padding: var(--spacing-sm); border-radius: var(--radius); margin-bottom: var(--spacing-sm);">
+                                    <strong>✓ Тренировка выполнена</strong>
+                                </div>` : 
+                                `<div style="background: rgba(245, 158, 11, 0.2); padding: var(--spacing-sm); border-radius: var(--radius); margin-bottom: var(--spacing-sm);">
+                                    <strong>📝 Запланирована тренировка</strong>
+                                </div>`
+                            }
+                            
+                            <div class="workout-schedule">
+                                <h4 style="margin-bottom: var(--spacing-sm);">Расписание тренировки:</h4>
+                                <div class="schedule-item">
+                                    <div class="schedule-time">${TRAINING_SCHEDULE.workoutTime}</div>
+                                    <div class="schedule-activity">Силовая тренировка</div>
+                                </div>
+                                <div class="schedule-item">
+                                    <div class="schedule-time">20:00-20:15</div>
+                                    <div class="schedule-activity">Растяжка и заминка</div>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: var(--spacing-md);">
+                                <h4 style="margin-bottom: var(--spacing-sm);">Рекомендации:</h4>
+                                <ul style="list-style: none; padding-left: 0;">
+                                    <li style="padding: var(--spacing-xs) 0; border-bottom: 1px solid var(--border-light);">• Прием пищи за 2-3 часа до тренировки</li>
+                                    <li style="padding: var(--spacing-xs) 0; border-bottom: 1px solid var(--border-light);">• 500 мл воды во время тренировки</li>
+                                    <li style="padding: var(--spacing-xs) 0;">• Протеиновый коктейль в течение 30 минут после</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // День отдыха
+                    const proteinTarget = this.state.userData.weight ? 
+                        Math.round(this.state.userData.weight * 2.2) : 'X';
+                    
+                    dayInfoHTML = `
+                        <div class="calendar-modal-day rest">
+                            <h3 class="calendar-modal-title">${day} ${monthName} - ${dayName}</h3>
+                            <p class="calendar-modal-subtitle">🧘 День отдыха и восстановления</p>
+                            
+                            <div style="background: rgba(139, 92, 246, 0.2); padding: var(--spacing-sm); border-radius: var(--radius); margin-bottom: var(--spacing-sm);">
+                                <strong>Важно дать мышцам восстановиться!</strong>
+                            </div>
+                            
+                            <div style="margin-top: var(--spacing-md);">
+                                <h4 style="margin-bottom: var(--spacing-sm);">Цели на день:</h4>
+                                <ul style="list-style: none; padding-left: 0;">
+                                    <li style="padding: var(--spacing-xs) 0; border-bottom: 1px solid var(--border-light);">• <strong>Белок:</strong> ${proteinTarget} грамм</li>
+                                    <li style="padding: var(--spacing-xs) 0; border-bottom: 1px solid var(--border-light);">• <strong>Сон:</strong> не менее 8 часов</li>
+                                    <li style="padding: var(--spacing-xs) 0; border-bottom: 1px solid var(--border-light);">• <strong>Вода:</strong> 2-3 литра</li>
+                                    <li style="padding: var(--spacing-xs) 0;">• <strong>Активность:</strong> легкая прогулка 30-40 минут</li>
+                                </ul>
+                            </div>
+                            
+                            <div style="margin-top: var(--spacing-md);">
+                                <h4 style="margin-bottom: var(--spacing-sm);">Рекомендации по восстановлению:</h4>
+                                <ul style="list-style: none; padding-left: 0;">
+                                    <li style="padding: var(--spacing-xs) 0; border-bottom: 1px solid var(--border-light);">• Сделайте легкую растяжку утром и вечером</li>
+                                    <li style="padding: var(--spacing-xs) 0; border-bottom: 1px solid var(--border-light);">• Примите магний перед сном для улучшения восстановления</li>
+                                    <li style="padding: var(--spacing-xs) 0;">• Избегайте интенсивной активности</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Проверяем, сегодня ли это
+                const today = new Date();
+                const isToday = date.getDate() === today.getDate() && 
+                               date.getMonth() === today.getMonth() && 
+                               date.getFullYear() === today.getFullYear();
+                
+                if (isToday && isWorkoutDay && !hasWorkout) {
+                    dayInfoHTML += `
+                        <button class="btn btn-primary btn-block mt-4" onclick="SportAI.markWorkoutToday(); SportAI.closeCalendarModal();">
+                            Отметить тренировку сегодня
+                        </button>
+                    `;
+                }
+                
+                document.getElementById('calendarDayInfo').innerHTML = dayInfoHTML;
+                document.getElementById('calendarModal').classList.add('active');
+            }
+            
+            closeCalendarModal() {
+                document.getElementById('calendarModal').classList.remove('active');
             }
             
             updateProfile() {
@@ -2771,7 +3883,7 @@
                 }
             }
             
-            updateUserData() {
+            async updateUserData() {
                 const height = parseInt(document.getElementById('updateHeight').value);
                 const weight = parseInt(document.getElementById('updateWeight').value);
                 const wrist = parseFloat(document.getElementById('updateWrist').value);
@@ -2787,12 +3899,18 @@
                 this.state.userData.wrist = wrist;
                 this.state.userData.ankle = ankle;
                 
-                this.saveState();
+                await this.saveState();
                 this.updateProfile();
-                alert('Данные обновлены!');
+                
+                // Пересчитываем все данные питания
+                if (this.state.currentSportDetails) {
+                    this.showSportDetails(this.state.currentSportDetails);
+                }
+                
+                alert('Данные обновлены! Питание пересчитано под ваш новый вес.');
             }
             
-            updateBodyweightTest() {
+            async updateBodyweightTest() {
                 const pushups = parseInt(document.getElementById('updatePushups').value) || 0;
                 const plank = parseInt(document.getElementById('updatePlank').value) || 0;
                 const pullups = parseInt(document.getElementById('updatePullups').value) || 0;
@@ -2805,7 +3923,7 @@
                     squats: squats
                 };
                 
-                this.saveState();
+                await this.saveState();
                 this.calculateFitnessLevel();
                 this.updateProfile();
                 alert('Рекорды обновлены!');
@@ -2876,8 +3994,16 @@
                 return Math.min(100, score);
             }
             
-            resetApp() {
+            async resetApp() {
                 if (confirm('Сбросить все данные и начать заново?')) {
+                    if (this.isTelegram) {
+                        try {
+                            await window.Telegram.WebApp.CloudStorage.removeItem('sportAIState');
+                        } catch (error) {
+                            console.error('Ошибка удаления из CloudStorage:', error);
+                        }
+                    }
+                    
                     localStorage.removeItem('sportAIState');
                     localStorage.removeItem('user_tested');
                     location.reload();
@@ -2889,11 +4015,8 @@
         const SportAI = new SportAIPro();
         window.SportAI = SportAI;
 
-        // Инициализация после загрузки DOM
-        document.addEventListener('DOMContentLoaded', () => {
-            SportAI.updateTimeBasedContent();
-            document.documentElement.setAttribute('data-theme', SportAI.state.theme);
-        });
+        // Экспорт функций для использования в HTML
+        window.SportAIPro = SportAIPro;
     </script>
 </body>
 </html>
