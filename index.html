@@ -1,99 +1,35 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>Тест ИИ Тренера</title>
-    <style>
-        body { font-family: sans-serif; padding: 20px; background: #121212; color: white; }
-        .block { border: 1px solid #333; padding: 15px; margin-bottom: 10px; border-radius: 8px; }
-        button { cursor: pointer; padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; }
-        input { padding: 10px; border-radius: 5px; border: 1px solid #444; background: #222; color: white; }
-        #chat-log { height: 150px; overflow-y: auto; background: #000; padding: 10px; margin-top: 10px; border-radius: 5px; font-size: 14px; }
-        .status { font-size: 12px; color: #888; margin-bottom: 5px; }
-    </style>
+    <title>Тест LM Studio + Tuna</title>
 </head>
-<body>
-
-    <h2>⚙️ Настройки и Тест</h2>
-    
-    <div class="block">
-        <label>Вес (кг): </label>
-        <input type="number" id="userWeight" value="80">
-    </div>
-
-    <div class="block">
-        <h3>💊 Расчет добавки (Только цифры)</h3>
-        <button onclick="getSupps()">Рассчитать Креатин</button>
-        <p id="supps-out">Тут будет ответ...</p>
-    </div>
-
-    <div class="block">
-        <h3>💬 Чат с тренером (Общение)</h3>
-        <div id="chat-log"></div>
-        <br>
-        <input type="text" id="chatInput" placeholder="Спроси что-нибудь..." style="width: 70%;">
-        <button onclick="sendChatMessage()">Отправить</button>
-    </div>
+<body style="background: #222; color: white; text-align: center; font-family: sans-serif;">
+    <h1>Проверка связи</h1>
+    <button id="btn" style="padding: 10px 20px;">Спросить ИИ "Привет"</button>
+    <p id="out">Ожидание нажатия...</p>
 
     <script>
-        // ВСТАВЬ СВОЮ ССЫЛКУ ТУТ (без /v1/chat/completions на конце, мы добавим её ниже)
-        const BASE_URL = "https://g0qjt7-5-228-114-75.ru.tuna.am"; 
-        const MODEL = "mistralai/mistral-3-3b";
-
-        async function callAI(systemPrompt, userMessage) {
+        document.getElementById('btn').onclick = async () => {
+            const out = document.getElementById('out');
+            out.innerText = "Запрос ушел... Ждем ответ...";
+            
             try {
-                const response = await fetch(`${BASE_URL}/v1/chat/completions`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                const res = await fetch("https://g0qjt7-5-228-114-75.ru.tuna.am/v1/chat/completions", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        model: MODEL,
-                        messages: [
-                            { role: "system", content: systemPrompt },
-                            { role: "user", content: userMessage }
-                        ],
-                        temperature: 0.3
+                        model: "mistralai/mistral-3-3b",
+                        messages: [{ role: "user", content: "Скажи 'Привет, я работаю!'" }]
                     })
                 });
-
-                if (!response.ok) throw new Error('Ошибка сервера');
-                const data = await response.json();
-                return data.choices[0].message.content;
-            } catch (err) {
-                console.error(err);
-                return "Ошибка подключения: проверь Tuna и LM Studio!";
+                const data = await res.json();
+                out.innerText = "ОТВЕТ: " + data.choices[0].message.content;
+            } catch (e) {
+                out.innerText = "ОШИБКА: " + e.message;
+                console.error(e);
             }
-        }
-
-        // Логика для добавок (Сухой ответ)
-        async function getSupps() {
-            const weight = document.getElementById('userWeight').value;
-            const out = document.getElementById('supps-out');
-            out.innerText = "ИИ считает...";
-            
-            const sys = "Ты — калькулятор. Выдай только название добавки и дозировку цифрами. Без лишних слов.";
-            const msg = `Рассчитай дозу креатина для человека весом ${weight} кг.`;
-            
-            out.innerText = await callAI(sys, msg);
-        }
-
-        // Логика для чата (Живое общение)
-        async function sendChatMessage() {
-            const input = document.getElementById('chatInput');
-            const log = document.getElementById('chat-log');
-            const weight = document.getElementById('userWeight').value;
-            
-            if (!input.value) return;
-
-            log.innerHTML += `<div><b>Вы:</b> ${input.value}</div>`;
-            const userText = input.value;
-            input.value = "";
-
-            const sys = `Ты — дружелюбный фитнес-тренер. У твоего клиента вес ${weight}кг. Отвечай кратко, но полезно.`;
-            
-            const aiResponse = await callAI(sys, userText);
-            log.innerHTML += `<div style="color: #00ff00"><b>Тренер:</b> ${aiResponse}</div>`;
-            log.scrollTop = log.scrollHeight;
-        }
+        };
     </script>
 </body>
 </html>
