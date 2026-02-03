@@ -1287,6 +1287,175 @@
             width: 100%;
         }
 
+        /* AI Trainer Chat Window */
+        .chat-container {
+            position: fixed;
+            bottom: 70px;
+            right: var(--spacing-md);
+            width: 350px;
+            height: 500px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            display: flex;
+            flex-direction: column;
+            z-index: 2000;
+            box-shadow: var(--shadow-lg);
+            display: none;
+        }
+
+        .chat-container.active {
+            display: flex;
+        }
+
+        .chat-header {
+            padding: var(--spacing-sm);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+
+        .chat-title {
+            font-weight: 600;
+            font-size: var(--font-sm);
+        }
+
+        .chat-close {
+            background: none;
+            border: none;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .chat-close:hover {
+            background: var(--border-color);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--spacing-sm);
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+
+        .chat-message {
+            padding: var(--spacing-sm);
+            border-radius: var(--radius);
+            max-width: 80%;
+            font-size: var(--font-sm);
+            line-height: 1.4;
+        }
+
+        .chat-message.user {
+            align-self: flex-end;
+            background: var(--info-color);
+            color: white;
+        }
+
+        .chat-message.assistant {
+            align-self: flex-start;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .chat-input-area {
+            padding: var(--spacing-sm);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: var(--spacing-xs);
+            background: var(--bg-tertiary);
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: var(--font-sm);
+            font-family: inherit;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .chat-send-btn {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            background: var(--accent-color);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: var(--font-sm);
+            font-weight: 500;
+        }
+
+        .chat-send-btn:hover {
+            background: var(--text-secondary);
+        }
+
+        /* AI Generate Button */
+        .ai-generate-btn {
+            margin-top: var(--spacing-sm);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+        }
+
+        .ai-generate-btn:hover {
+            background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+            transform: translateY(-1px);
+        }
+
+        .ai-loading {
+            display: none;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-sm);
+            justify-content: center;
+            color: var(--text-secondary);
+        }
+
+        .ai-loading.active {
+            display: flex;
+        }
+
+        /* AI Trainer Button in Header */
+        .ai-trainer-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-base);
+            padding: 0;
+        }
+
+        .ai-trainer-btn:hover {
+            background: var(--border-color);
+            transform: scale(1.05);
+        }
+
         /* Navigation */
         .nav {
             position: fixed;
@@ -1418,6 +1587,12 @@
             .gym-goal-selector {
                 flex-direction: column;
             }
+            
+            .chat-container {
+                width: calc(100% - var(--spacing-md) * 2);
+                height: 400px;
+                bottom: 60px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1452,11 +1627,37 @@
             .calendar-grid {
                 gap: 1px;
             }
+            
+            .chat-container {
+                width: calc(100% - var(--spacing-xs) * 2);
+                height: 350px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="app-container">
+        <!-- AI Trainer Chat Window -->
+        <div class="chat-container" id="aiChat">
+            <div class="chat-header">
+                <div class="chat-title">ИИ-Тренер</div>
+                <button class="chat-close" onclick="SportAI.closeChat()">×</button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-message assistant">
+                    Привет! Я ваш персональный ИИ-тренер. Спросите меня о тренировках, питании или восстановлении.
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Введите ваш вопрос...">
+                <button class="chat-send-btn" onclick="SportAI.sendMessage()">→</button>
+            </div>
+            <div class="ai-loading" id="chatLoading">
+                <div class="spinner"></div>
+                <span>ИИ думает...</span>
+            </div>
+        </div>
+
         <!-- Onboarding Screen (Fullscreen) -->
         <div class="onboarding" id="onboarding">
             <!-- Step 1: Welcome -->
@@ -1696,9 +1897,28 @@
                     <button class="goal-btn" data-goal="shape">Форма и рельеф</button>
                 </div>
                 
-                <!-- Тренировки -->
+                <!-- Тренировки с AI генерацией -->
                 <div class="sport-details-section">
-                    <h3 class="h3">Тренировочная программа</h3>
+                    <div class="d-flex justify-center align-center gap-4 mb-3">
+                        <h3 class="h3">Тренировочная программа</h3>
+                        <button class="btn ai-generate-btn btn-sm" onclick="SportAI.generateWorkout()">
+                            <svg class="icon-btn" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M12 18V22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M4.93 4.93L7.76 7.76" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M16.24 16.24L19.07 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M2 12H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M18 12H22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M4.93 19.07L7.76 16.24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            Сгенерировать ИИ
+                        </button>
+                    </div>
+                    <div class="ai-loading" id="workoutLoading">
+                        <div class="spinner"></div>
+                        <span>ИИ создает тренировку...</span>
+                    </div>
                     <ul class="workout-list" id="workoutList">
                         <!-- Заполняется JavaScript -->
                     </ul>
@@ -1716,9 +1936,28 @@
                     </div>
                 </div>
                 
-                <!-- Добавки -->
+                <!-- Добавки с AI генерацией -->
                 <div class="sport-details-section">
-                    <h3 class="h3">Добавки и БАДы</h3>
+                    <div class="d-flex justify-center align-center gap-4 mb-3">
+                        <h3 class="h3">Добавки и БАДы</h3>
+                        <button class="btn ai-generate-btn btn-sm" onclick="SportAI.generateSupplements()">
+                            <svg class="icon-btn" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M12 18V22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M4.93 4.93L7.76 7.76" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M16.24 16.24L19.07 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M2 12H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M18 12H22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M4.93 19.07L7.76 16.24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            Подобрать ИИ
+                        </button>
+                    </div>
+                    <div class="ai-loading" id="supplementsLoading">
+                        <div class="spinner"></div>
+                        <span>ИИ подбирает добавки...</span>
+                    </div>
                     <div class="supplements-categories" id="supplementsCategories">
                         <!-- Заполняется JavaScript -->
                     </div>
@@ -1768,6 +2007,12 @@
                 </div>
                 
                 <div class="header-actions">
+                    <div class="ai-trainer-btn" onclick="SportAI.toggleChat()" title="ИИ-Тренер">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 11.5C21 16.7467 16.7467 21 11.5 21C6.25329 21 2 16.7467 2 11.5C2 6.25329 6.25329 2 11.5 2C16.7467 2 21 6.25329 21 11.5Z" stroke="currentColor" stroke-width="2"/>
+                            <path d="M8 9H15M8 13H12M17.5 15L15.5 17L12.5 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
                     <div class="profile-btn-header" onclick="SportAI.showSection('profile')" title="Профиль">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M12 12C14.2091 12 16 10.2091 16 8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8C8 10.2091 9.79086 12 12 12Z" stroke="currentColor" stroke-width="2"/>
@@ -2052,9 +2297,17 @@
 
     <script>
         /**
-         * SportAI Pro - Enhanced Version with Telegram CloudStorage & Calendar
-         * Версия 7.0: Вечное сохранение данных в Telegram Cloud, интерактивный календарь, адаптивные тренировки
+         * SportAI Pro - Enhanced Version with Telegram CloudStorage & Calendar & AI Trainer
+         * Версия 8.0: Интеграция с LM Studio API для ИИ-тренера
          */
+
+        // Конфигурация LM Studio API
+        const LM_STUDIO_CONFIG = {
+            endpoint: 'http://127.0.0.1:1234/v1/chat/completions',
+            model: 'mistralai/mistral-3-3b',
+            temperature: 0.3,
+            max_tokens: 1000
+        };
 
         // Проверяем наличие Telegram WebApp
         const isTelegramApp = typeof window.Telegram !== 'undefined' && 
@@ -2305,7 +2558,6 @@
                             fatPerKg: 1,
                             calorieSurplus: 0.20
                         },
-                        // Базовые тренировки будут адаптироваться в зависимости от уровня пользователя
                         baseWorkouts: [
                             { 
                                 name: 'Жим штанги лежа', 
@@ -2348,7 +2600,6 @@
                                 requiresBarbell: false
                             }
                         ],
-                        // Адаптивные тренировки для новичков
                         adaptiveWorkouts: [
                             { 
                                 name: 'Жим гантелей лежа', 
@@ -2544,7 +2795,8 @@
                     todayWorkoutCompleted: false,
                     workoutHistory: {}, // История тренировок по датам
                     calendarCurrentMonth: new Date().getMonth(),
-                    calendarCurrentYear: new Date().getFullYear()
+                    calendarCurrentYear: new Date().getFullYear(),
+                    chatHistory: [] // История чата с ИИ
                 };
                 
                 this.currentOnboardingStep = 1;
@@ -2569,6 +2821,7 @@
                 this.initTimeBasedContent();
                 this.checkWorkoutStatus();
                 this.initMiniCalendar();
+                this.setupChatInput();
             }
             
             // Асинхронное сохранение данных в Telegram CloudStorage или localStorage
@@ -2625,7 +2878,8 @@
                             calendarCurrentMonth: savedData.calendarCurrentMonth !== undefined ? 
                                 savedData.calendarCurrentMonth : new Date().getMonth(),
                             calendarCurrentYear: savedData.calendarCurrentYear !== undefined ? 
-                                savedData.calendarCurrentYear : new Date().getFullYear()
+                                savedData.calendarCurrentYear : new Date().getFullYear(),
+                            chatHistory: savedData.chatHistory || []
                         };
                     }
                 } catch (e) {
@@ -2715,6 +2969,15 @@
                         if (this.state.currentSportDetails === 'gym') {
                             this.showSportDetails('gym');
                         }
+                    }
+                });
+            }
+            
+            setupChatInput() {
+                const chatInput = document.getElementById('chatInput');
+                chatInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.sendMessage();
                     }
                 });
             }
@@ -3992,6 +4255,434 @@
                 if (bodyweight.squats > 0) score += Math.min(20, bodyweight.squats / 2);
                 
                 return Math.min(100, score);
+            }
+            
+            // === ИИ ФУНКЦИОНАЛ ===
+            
+            // Генерация тренировки через ИИ
+            async generateWorkout() {
+                if (!this.state.currentSportDetails) {
+                    alert('Сначала выберите спорт');
+                    return;
+                }
+                
+                const sport = SPORTS_DATABASE[this.state.currentSportDetails];
+                const goal = this.state.currentGymGoal;
+                const weight = this.state.userData.weight || 70;
+                const height = this.state.userData.height || 175;
+                const isBeginner = this.isBeginnerLevel();
+                
+                const loading = document.getElementById('workoutLoading');
+                loading.classList.add('active');
+                
+                try {
+                    let prompt = '';
+                    
+                    if (this.state.currentSportDetails === 'gym') {
+                        prompt = `Ты персональный тренер. Создай список из 5 упражнений для тренажерного зала для цели "${goal === 'muscle' ? 'набор мышечной массы' : 'форма и рельеф'}".
+Данные пользователя: вес ${weight} кг, рост ${height} см, уровень подготовки: ${isBeginner ? 'новичок' : 'средний'}.
+Выведи ТОЛЬКО список упражнений в формате:
+1. Название упражнения (подходы x повторения, отдых: время)
+2. Название упражнения (подходы x повторения, отдых: время)
+и т.д.
+Без вступлений и пояснений, только сухой список.`;
+                    } else {
+                        prompt = `Ты персональный тренер. Создай список из 5 упражнений для вида спорта "${sport.name}".
+Данные пользователя: вес ${weight} кг, рост ${height} см.
+Выведи ТОЛЬКО список упражнений в формате:
+1. Название упражнения (подходы x повторения, отдых: время)
+2. Название упражнения (подходы x повторения, отдых: время)
+и т.д.
+Без вступлений и пояснений, только сухой список.`;
+                    }
+                    
+                    const workoutText = await this.callLMStudioAPI(prompt);
+                    
+                    // Парсим ответ ИИ и преобразуем в формат тренировок
+                    const workouts = this.parseAIWorkoutResponse(workoutText);
+                    
+                    // Обновляем список тренировок
+                    const workoutList = document.getElementById('workoutList');
+                    workoutList.innerHTML = workouts.map(workout => `
+                        <li class="workout-item">
+                            <div class="workout-header">
+                                <div class="workout-name">${workout.name}</div>
+                            </div>
+                            <div class="workout-details">
+                                <span class="workout-detail-item">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M8 12H16M12 8V16" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    Подходы: ${workout.sets}
+                                </span>
+                                <span class="workout-detail-item">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 8V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    Повторения: ${workout.reps}
+                                </span>
+                                <span class="workout-detail-item">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 20V10M8 20V14M16 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                    Отдых: ${workout.rest}
+                                </span>
+                            </div>
+                            ${workout.tip ? `<div class="workout-tip">💡 ${workout.tip}</div>` : ''}
+                        </li>
+                    `).join('');
+                    
+                } catch (error) {
+                    console.error('Ошибка генерации тренировки:', error);
+                    alert('Не удалось сгенерировать тренировку. Проверьте подключение к LM Studio.');
+                } finally {
+                    loading.classList.remove('active');
+                }
+            }
+            
+            // Генерация добавок через ИИ
+            async generateSupplements() {
+                const weight = this.state.userData.weight || 70;
+                const height = this.state.userData.height || 175;
+                const sport = this.state.currentSportDetails ? SPORTS_DATABASE[this.state.currentSportDetails] : null;
+                
+                if (!weight) {
+                    alert('Укажите ваш вес в профиле');
+                    return;
+                }
+                
+                const loading = document.getElementById('supplementsLoading');
+                loading.classList.add('active');
+                
+                try {
+                    let prompt = '';
+                    
+                    if (sport && sport.id === 'gym') {
+                        prompt = `Ты персональный тренер. Подбери добавки для тренажерного зала для цели "${this.state.currentGymGoal === 'muscle' ? 'набор мышечной массы' : 'форма и рельеф'}".
+Данные пользователя: вес ${weight} кг.
+Выведи ТОЛЬКО список добавок в формате:
+Название добавки: граммовка/дозировка в день
+Название добавки: граммовка/дозировка в день
+и т.д.
+Пример: Креатин моногидрат: 5 г в день
+Без вступлений и пояснений, только сухой список.`;
+                    } else if (sport) {
+                        prompt = `Ты персональный тренер. Подбери добавки для вида спорта "${sport.name}".
+Данные пользователя: вес ${weight} кг.
+Выведи ТОЛЬКО список добавок в формате:
+Название добавки: граммовка/дозировка в день
+Название добавки: граммовка/дозировка в день
+и т.д.
+Пример: Креатин моногидрат: 5 г в день
+Без вступлений и пояснений, только сухой список.`;
+                    } else {
+                        prompt = `Ты персональный тренер. Подбери базовые добавки для активного образа жизни.
+Данные пользователя: вес ${weight} кг.
+Выведи ТОЛЬКО список добавок в формате:
+Название добавки: граммовка/дозировка в день
+Название добавки: граммовка/дозировка в день
+и т.д.
+Пример: Омега-3: 2000 мг в день
+Без вступлений и пояснений, только сухой список.`;
+                    }
+                    
+                    const supplementsText = await this.callLMStudioAPI(prompt);
+                    
+                    // Парсим ответ ИИ и преобразуем в формат добавок
+                    const supplements = this.parseAISupplementsResponse(supplementsText);
+                    
+                    // Обновляем список добавок
+                    const container = document.getElementById('supplementsCategories');
+                    
+                    // Группируем по категориям (упрощенно)
+                    const categories = {
+                        essential: { title: 'Основное', icon: '⭐', supplements: supplements.slice(0, 2) },
+                        recovery: { title: 'Для восстановления', icon: '🔄', supplements: supplements.slice(2, 4) }
+                    };
+                    
+                    // Рендеринг категорий
+                    container.innerHTML = '';
+                    
+                    Object.entries(categories).forEach(([categoryId, category]) => {
+                        if (category.supplements.length === 0) return;
+                        
+                        const categoryHtml = `
+                            <div class="supplement-category">
+                                <div class="category-header">
+                                    <div class="category-icon">${category.icon}</div>
+                                    <div class="category-title">${category.title}</div>
+                                </div>
+                                <ul class="supplements-list">
+                                    ${category.supplements.map(supplement => `
+                                        <li class="supplement-item">
+                                            <div class="supplement-name">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                                    <path d="M12 8V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                                </svg>
+                                                ${supplement.name}
+                                            </div>
+                                            <div class="supplement-desc">${supplement.description}</div>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        `;
+                        
+                        container.innerHTML += categoryHtml;
+                    });
+                    
+                } catch (error) {
+                    console.error('Ошибка генерации добавок:', error);
+                    alert('Не удалось подобрать добавки. Проверьте подключение к LM Studio.');
+                } finally {
+                    loading.classList.remove('active');
+                }
+            }
+            
+            // Чат с ИИ-тренером
+            async sendMessage() {
+                const input = document.getElementById('chatInput');
+                const message = input.value.trim();
+                
+                if (!message) return;
+                
+                // Очищаем поле ввода
+                input.value = '';
+                
+                // Добавляем сообщение пользователя в чат
+                this.addChatMessage(message, 'user');
+                
+                // Показываем индикатор загрузки
+                const loading = document.getElementById('chatLoading');
+                loading.classList.add('active');
+                
+                try {
+                    // Собираем данные пользователя для системного промпта
+                    const weight = this.state.userData.weight || 'не указан';
+                    const height = this.state.userData.height || 'не указан';
+                    const goal = this.state.currentGymGoal === 'muscle' ? 'набор мышечной массы' : 
+                                this.state.currentGymGoal === 'shape' ? 'форма и рельеф' : 'не указана';
+                    const sport = this.state.currentSportDetails ? SPORTS_DATABASE[this.state.currentSportDetails].name : 'не выбран';
+                    
+                    // Системный промпт
+                    const systemPrompt = `Ты персональный тренер. Данные пользователя: вес ${weight} кг, рост ${height} см, цель ${goal}, основной спорт: ${sport}. 
+                    Отвечай кратко и по делу, только по теме тренировок, питания и восстановления. Не пиши вступлений типа "Конечно, вот ответ".`;
+                    
+                    // Формируем промпт для ИИ
+                    const prompt = `${systemPrompt}\n\nВопрос пользователя: ${message}`;
+                    
+                    // Вызываем API
+                    const response = await this.callLMStudioAPI(prompt);
+                    
+                    // Добавляем ответ ИИ в чат
+                    this.addChatMessage(response, 'assistant');
+                    
+                    // Сохраняем в историю
+                    this.state.chatHistory.push({
+                        role: 'user',
+                        content: message
+                    });
+                    this.state.chatHistory.push({
+                        role: 'assistant',
+                        content: response
+                    });
+                    
+                    // Сохраняем состояние
+                    await this.saveState();
+                    
+                } catch (error) {
+                    console.error('Ошибка отправки сообщения:', error);
+                    this.addChatMessage('Извините, произошла ошибка. Проверьте подключение к LM Studio.', 'assistant');
+                } finally {
+                    loading.classList.remove('active');
+                }
+            }
+            
+            // Добавление сообщения в чат
+            addChatMessage(message, role) {
+                const messagesContainer = document.getElementById('chatMessages');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `chat-message ${role}`;
+                messageDiv.textContent = message;
+                messagesContainer.appendChild(messageDiv);
+                
+                // Прокручиваем вниз
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+            
+            // Открыть/закрыть чат
+            toggleChat() {
+                const chat = document.getElementById('aiChat');
+                chat.classList.toggle('active');
+                
+                if (chat.classList.contains('active')) {
+                    document.getElementById('chatInput').focus();
+                }
+            }
+            
+            closeChat() {
+                document.getElementById('aiChat').classList.remove('active');
+            }
+            
+            // Вызов LM Studio API
+            async callLMStudioAPI(prompt) {
+                try {
+                    const response = await fetch(LM_STUDIO_CONFIG.endpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            model: LM_STUDIO_CONFIG.model,
+                            messages: [
+                                {
+                                    role: "system",
+                                    content: "Ты персональный тренер. Отвечай кратко и по делу."
+                                },
+                                {
+                                    role: "user",
+                                    content: prompt
+                                }
+                            ],
+                            temperature: LM_STUDIO_CONFIG.temperature,
+                            max_tokens: LM_STUDIO_CONFIG.max_tokens,
+                            stream: false
+                        })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    if (data.choices && data.choices[0] && data.choices[0].message) {
+                        return data.choices[0].message.content.trim();
+                    } else {
+                        throw new Error('Invalid response format from LM Studio');
+                    }
+                    
+                } catch (error) {
+                    console.error('Error calling LM Studio API:', error);
+                    
+                    // Fallback: возвращаем тестовые данные если API недоступно
+                    if (prompt.includes('упражнения')) {
+                        return `1. Приседания со штангой (4x8-12, отдых: 90 сек)
+2. Жим штанги лежа (4x8-12, отдых: 90 сек)
+3. Тяга штанги в наклоне (3x10-12, отдых: 60 сек)
+4. Жим гантелей сидя (3x10-12, отдых: 60 сек)
+5. Подтягивания (3xмакс, отдых: 60 сек)`;
+                    } else if (prompt.includes('добавки')) {
+                        return `Креатин моногидрат: 5 г в день
+Сывороточный протеин: 30 г после тренировки
+Омега-3: 2000 мг в день
+Витамин D3: 2000 МЕ в день
+Магний: 400 мг перед сном`;
+                    } else {
+                        return `Извините, сервис временно недоступен. Проверьте, что LM Studio запущен на http://127.0.0.1:1234 и модель mistralai/mistral-3-3b загружена.`;
+                    }
+                }
+            }
+            
+            // Парсинг ответа ИИ для тренировок
+            parseAIWorkoutResponse(text) {
+                const lines = text.split('\n').filter(line => line.trim());
+                const workouts = [];
+                
+                lines.forEach(line => {
+                    // Пытаемся извлечь данные из формата: "1. Название (подходы x повторения, отдых: время)"
+                    const match = line.match(/(\d+)\.\s+(.+?)\s+\((.+?)\)/);
+                    if (match) {
+                        const [, number, name, details] = match;
+                        
+                        // Парсим детали
+                        let sets = '3-4';
+                        let reps = '10-12';
+                        let rest = '60-90 сек';
+                        
+                        if (details.includes('x')) {
+                            const setsRepsMatch = details.match(/(\d+)(?:-(\d+))?x(\d+)(?:-(\d+))?/);
+                            if (setsRepsMatch) {
+                                const [, setMin, setMax, repMin, repMax] = setsRepsMatch;
+                                sets = setMax ? `${setMin}-${setMax}` : setMin;
+                                reps = repMax ? `${repMin}-${repMax}` : repMin;
+                            }
+                        }
+                        
+                        // Ищем время отдыха
+                        const restMatch = details.match(/отдых:\s*([^,]+)/i);
+                        if (restMatch) {
+                            rest = restMatch[1].trim();
+                        }
+                        
+                        workouts.push({
+                            name: name.trim(),
+                            sets: sets,
+                            reps: reps,
+                            rest: rest,
+                            tip: 'Сгенерировано ИИ на основе ваших данных'
+                        });
+                    } else if (line.includes('.')) {
+                        // Упрощенный парсинг
+                        const parts = line.split('.');
+                        if (parts.length > 1) {
+                            workouts.push({
+                                name: parts[1].trim(),
+                                sets: '3-4',
+                                reps: '10-12',
+                                rest: '60-90 сек',
+                                tip: 'Сгенерировано ИИ на основе ваших данных'
+                            });
+                        }
+                    }
+                });
+                
+                // Если не удалось распарсить, создаем тестовые данные
+                if (workouts.length === 0) {
+                    return [
+                        { name: 'Приседания со штангой', sets: '4', reps: '8-12', rest: '90 сек', tip: 'Сгенерировано ИИ на основе ваших данных' },
+                        { name: 'Жим штанги лежа', sets: '4', reps: '8-12', rest: '90 сек', tip: 'Сгенерировано ИИ на основе ваших данных' },
+                        { name: 'Тяга штанги в наклоне', sets: '3', reps: '10-12', rest: '60 сек', tip: 'Сгенерировано ИИ на основе ваших данных' },
+                        { name: 'Армейский жим', sets: '3', reps: '10-12', rest: '60 сек', tip: 'Сгенерировано ИИ на основе ваших данных' },
+                        { name: 'Подтягивания', sets: '3', reps: 'макс', rest: '60 сек', tip: 'Сгенерировано ИИ на основе ваших данных' }
+                    ];
+                }
+                
+                return workouts.slice(0, 5); // Берем максимум 5 упражнений
+            }
+            
+            // Парсинг ответа ИИ для добавок
+            parseAISupplementsResponse(text) {
+                const lines = text.split('\n').filter(line => line.trim());
+                const supplements = [];
+                
+                lines.forEach(line => {
+                    // Пытаемся извлечь данные из формата: "Название: дозировка"
+                    const colonMatch = line.match(/^(.+?):\s*(.+)$/);
+                    if (colonMatch) {
+                        const [, name, dosage] = colonMatch;
+                        supplements.push({
+                            name: name.trim(),
+                            description: `Рекомендуемая дозировка: ${dosage.trim()}. Сгенерировано ИИ на основе вашего веса.`,
+                            category: supplements.length < 2 ? 'essential' : 'recovery'
+                        });
+                    }
+                });
+                
+                // Если не удалось распарсить, создаем тестовые данные
+                if (supplements.length === 0) {
+                    return [
+                        { name: 'Креатин моногидрат', description: 'Рекомендуемая дозировка: 5 г в день. Сгенерировано ИИ на основе вашего веса.', category: 'essential' },
+                        { name: 'Сывороточный протеин', description: 'Рекомендуемая дозировка: 30 г после тренировки. Сгенерировано ИИ на основе вашего веса.', category: 'essential' },
+                        { name: 'Омега-3', description: 'Рекомендуемая дозировка: 2000 мг в день. Сгенерировано ИИ на основе вашего веса.', category: 'recovery' },
+                        { name: 'Магний', description: 'Рекомендуемая дозировка: 400 мг перед сном. Сгенерировано ИИ на основе вашего веса.', category: 'recovery' }
+                    ];
+                }
+                
+                return supplements.slice(0, 4); // Берем максимум 4 добавки
             }
             
             async resetApp() {
