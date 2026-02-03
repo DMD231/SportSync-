@@ -3,110 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberCoach AI</title>
+    <title>AI Sport Pulse</title>
     <style>
-        :root { --neon: #00f2ff; --bg: #0a0a0c; --card: #16161a; }
-        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .container { max-width: 500px; width: 100%; }
-        h1 { color: var(--neon); text-shadow: 0 0 10px var(--neon); text-align: center; }
+        :root { --neon: #00ff88; --accent: #00a2ff; --bg: #050505; }
+        body { background: var(--bg); color: #e0e0e0; font-family: 'Orbitron', sans-serif; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .app-container { max-width: 450px; width: 100%; }
         
-        .glass-card { background: var(--card); border: 1px solid #333; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
+        .header { text-align: center; border-bottom: 2px solid var(--neon); padding-bottom: 10px; margin-bottom: 25px; }
+        .header h1 { margin: 0; color: var(--neon); text-transform: uppercase; letter-spacing: 3px; font-size: 24px; }
+
+        .module { background: #111; border: 1px solid #222; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .module h3 { margin-top: 0; color: var(--accent); font-size: 16px; border-left: 3px solid var(--accent); padding-left: 10px; }
+
+        input { width: 100%; background: #1a1a1a; border: 1px solid #333; color: white; padding: 12px; border-radius: 6px; box-sizing: border-box; margin: 10px 0; }
+        button { width: 100%; background: linear-gradient(45deg, var(--neon), var(--accent)); border: none; padding: 12px; border-radius: 6px; color: #000; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        button:hover { opacity: 0.8; box-shadow: 0 0 15px var(--neon); }
+
+        #chat-box { height: 200px; overflow-y: auto; background: #080808; border-radius: 6px; padding: 10px; margin-bottom: 10px; border: 1px solid #222; font-size: 14px; }
+        .msg { margin-bottom: 12px; line-height: 1.4; }
+        .u-msg { color: var(--accent); text-align: right; }
+        .a-msg { color: var(--neon); border-bottom: 1px solid #1a1a1a; padding-bottom: 5px; }
         
-        input, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: none; box-sizing: border-box; }
-        input { background: #222; color: white; border: 1px solid #444; }
-        button { background: var(--neon); color: black; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { transform: scale(1.02); filter: brightness(1.2); }
-        
-        #chat-window { height: 250px; overflow-y: auto; background: #0d0d0f; border: 1px solid #222; padding: 10px; border-radius: 8px; font-size: 14px; display: flex; flex-direction: column; gap: 10px; }
-        .msg { padding: 8px 12px; border-radius: 12px; max-width: 85%; }
-        .user { align-self: flex-end; background: #333; }
-        .ai { align-self: flex-start; background: #1a2a3a; border-left: 3px solid var(--neon); }
-        
-        .loader { font-size: 12px; color: var(--neon); display: none; text-align: center; margin-top: 5px; }
+        #status-bar { font-size: 10px; text-align: center; color: #555; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>CYBER COACH 2.0</h1>
-
-    <div class="glass-card">
-        <label>Твой вес (кг):</label>
-        <input type="number" id="v_weight" value="80">
-        <button onclick="calculateSupps()">⚡ Рассчитать добавки</button>
-        <div id="supps-res" style="margin-top: 10px; font-size: 0.9em; color: #ccc;"></div>
+<div class="app-container">
+    <div class="header">
+        <h1>AI Sport Pulse</h1>
     </div>
 
-    <div class="glass-card">
-        <div id="chat-window">
-            <div class="msg ai">Система активна. Жду вопросов, атлет.</div>
+    <div class="module">
+        <h3>АНТРОПОМЕТРИЯ</h3>
+        <input type="number" id="userWeight" placeholder="Ваш вес (кг)" value="80">
+        <button onclick="getPlan()">Сгенерировать план БАДов</button>
+        <div id="planResult" style="margin-top:15px; font-size:13px;"></div>
+    </div>
+
+    <div class="module">
+        <h3>ТРЕНЕР НА СВЯЗИ</h3>
+        <div id="chat-box">
+            <div class="msg a-msg">Система готова к работе. Задай вопрос по тренировке.</div>
         </div>
-        <div id="chat-loader" class="loader">ИИ сканирует базу данных...</div>
-        <input type="text" id="chat-input" placeholder="Задай вопрос тренеру...">
-        <button onclick="sendChat()">Отправить в ИИ</button>
+        <input type="text" id="chatInput" placeholder="Введите сообщение...">
+        <button onclick="sendToCoach()">Отправить запрос</button>
     </div>
+
+    <div id="status-bar">CONNECTING TO: g0qjt7-5-228-114-75.ru.tuna.am</div>
 </div>
 
 <script>
-    // Твоя ссылка из Tuna
+    // Используем CORS-Proxy, чтобы обойти блокировку браузера
+    const PROXY = "https://cors-anywhere.herokuapp.com/";
     const TUNA_URL = "https://g0qjt7-5-228-114-75.ru.tuna.am/v1/chat/completions";
 
-    async function askAI(systemPrompt, userText, targetDiv, isChat = true) {
-        const loader = document.getElementById('chat-loader');
-        if(isChat) loader.style.display = 'block';
+    async function requestAI(sysPrompt, userPrompt, outputElement, isChat = false) {
+        if (!isChat) outputElement.innerHTML = "<i>Анализ данных...</i>";
 
         try {
-            const response = await fetch(TUNA_URL, {
+            const response = await fetch(PROXY + TUNA_URL, {
                 method: 'POST',
-                // Пытаемся передать заголовки так, чтобы Tuna их не заблокировала
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
                 body: JSON.stringify({
                     model: "mistralai/mistral-3-3b",
                     messages: [
-                        { role: "system", content: systemPrompt },
-                        { role: "user", content: userText }
+                        { role: "system", content: sysPrompt },
+                        { role: "user", content: userPrompt }
                     ],
-                    temperature: 0.7
+                    temperature: 0.5
                 })
             });
 
             const data = await response.json();
-            const answer = data.choices[0].message.content;
+            const text = data.choices[0].message.content;
 
-            if(isChat) {
-                targetDiv.innerHTML += `<div class="msg ai">${answer}</div>`;
-                targetDiv.scrollTop = targetDiv.scrollHeight;
+            if (isChat) {
+                outputElement.innerHTML += `<div class="msg a-msg"><b>AI:</b> ${text}</div>`;
+                outputElement.scrollTop = outputElement.scrollHeight;
             } else {
-                targetDiv.innerText = answer;
+                outputElement.innerHTML = `<div style="color:var(--neon)">${text.replace(/\n/g, '<br>')}</div>`;
             }
-        } catch (err) {
-            console.error("Ошибка:", err);
-            if(isChat) targetDiv.innerHTML += `<div class="msg ai" style="color:red">Ошибка связи. Проверь Tuna и CORS в LM Studio!</div>`;
-            else targetDiv.innerText = "Ошибка подключения.";
-        } finally {
-            loader.style.display = 'none';
+
+        } catch (e) {
+            console.error(e);
+            alert("Нужно активировать прокси! Перейди на https://cors-anywhere.herokuapp.com/corsdemo и нажми кнопку 'Request temporary access'");
         }
     }
 
-    function calculateSupps() {
-        const w = document.getElementById('v_weight').value;
-        const res = document.getElementById('supps-res');
-        res.innerText = "Вычисляю дозировки...";
-        const sys = "Ты — калькулятор БАДов. Пиши только кратко: Название - доза. Без воды.";
-        askAI(sys, `Рассчитай креатин и протеин на вес ${w} кг`, res, false);
+    function getPlan() {
+        const w = document.getElementById('userWeight').value;
+        const res = document.getElementById('planResult');
+        const sys = "Ты спортивный нутрициолог. Выдавай ТОЛЬКО список добавок и дозы. Никакого вступления.";
+        requestAI(sys, `Рассчитай добавки для атлета весом ${w}кг`, res, false);
     }
 
-    function sendChat() {
-        const inp = document.getElementById('chat-input');
-        const win = document.getElementById('chat-window');
-        const w = document.getElementById('v_weight').value;
+    function sendToCoach() {
+        const box = document.getElementById('chat-box');
+        const input = document.getElementById('chatInput');
+        const w = document.getElementById('userWeight').value;
         
-        if(!inp.value) return;
+        if (!input.value) return;
 
-        win.innerHTML += `<div class="msg user">${inp.value}</div>`;
-        const sys = `Ты — эмпатичный фитнес-тренер. Вес клиента: ${w}кг. Давай краткие и четкие советы.`;
-        askAI(sys, inp.value, win, true);
-        inp.value = "";
+        box.innerHTML += `<div class="msg u-msg">${input.value}</div>`;
+        const sys = `Ты элитный фитнес-тренер. Вес клиента ${w}кг. Отвечай кратко и по делу.`;
+        requestAI(sys, input.value, box, true);
+        input.value = "";
     }
 </script>
 
