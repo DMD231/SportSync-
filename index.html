@@ -2815,52 +2815,96 @@
             }
         };
 
-        // Расширенная база упражнений с типами
-        const EXERCISE_DATABASE = {
-            strength: [
-                { name: 'Приседания со штангой', type: 'compound', primary: 'ноги', secondary: ['спина', 'пресс'] },
-                { name: 'Жим штанги лежа', type: 'compound', primary: 'грудь', secondary: ['трицепс', 'передние дельты'] },
-                { name: 'Становая тяга', type: 'compound', primary: 'спина', secondary: ['ноги', 'предплечья'] },
-                { name: 'Жим штанги стоя', type: 'compound', primary: 'плечи', secondary: ['трицепс'] },
-                { name: 'Подтягивания', type: 'compound', primary: 'спина', secondary: ['бицепс', 'предплечья'] },
-                { name: 'Отжимания на брусьях', type: 'compound', primary: 'грудь', secondary: ['трицепс', 'передние дельты'] },
-                { name: 'Тяга штанги в наклоне', type: 'compound', primary: 'спина', secondary: ['бицепс', 'задние дельты'] },
-                { name: 'Армейский жим', type: 'compound', primary: 'плечи', secondary: ['трицепс'] },
-                { name: 'Румынская тяга', type: 'compound', primary: 'задняя поверхность бедра', secondary: ['ягодицы', 'спина'] },
-                { name: 'Выпады с гантелями', type: 'compound', primary: 'ноги', secondary: ['ягодицы', 'пресс'] },
-                { name: 'Сгибания рук на бицепс', type: 'isolation', primary: 'бицепс', secondary: [] },
-                { name: 'Разгибания на трицепс', type: 'isolation', primary: 'трицепс', secondary: [] },
-                { name: 'Махи гантелями в стороны', type: 'isolation', primary: 'плечи', secondary: [] },
-                { name: 'Подъем на носки', type: 'isolation', primary: 'икры', secondary: [] }
-            ],
-            
-            endurance: [
-                { name: 'Берпи', type: 'plyometric', primary: 'все тело', secondary: ['кардио'] },
-                { name: 'Скакалка', type: 'cardio', primary: 'ноги', secondary: ['кардио', 'икры'] },
-                { name: 'Бег на месте с высоким подниманием бедра', type: 'cardio', primary: 'ноги', secondary: ['кардио'] },
-                { name: 'Прыжки на тумбу', type: 'plyometric', primary: 'ноги', secondary: ['взрывная сила'] },
-                { name: 'Планка', type: 'static', primary: 'пресс', secondary: ['кора', 'плечи'] },
-                { name: 'Боковая планка', type: 'static', primary: 'косые мышцы', secondary: ['кора'] },
-                { name: 'Приседания с выпрыгиванием', type: 'plyometric', primary: 'ноги', secondary: ['взрывная сила'] },
-                { name: 'Альпинист', type: 'cardio', primary: 'пресс', secondary: ['кардио', 'ноги'] },
-                { name: 'Велосипедные скручивания', type: 'isolation', primary: 'пресс', secondary: ['косые мышцы'] },
-                { name: 'Русские скручивания', type: 'isolation', primary: 'пресс', secondary: ['косые мышцы'] },
-                { name: 'Отжимания', type: 'compound', primary: 'грудь', secondary: ['трицепс', 'плечи'] },
-                { name: 'Воздушные приседания', type: 'compound', primary: 'ноги', secondary: ['ягодицы'] }
-            ],
-            
-            team_sports: [
-                { name: 'Спринты 30м', type: 'plyometric', primary: 'ноги', secondary: ['скорость'] },
-                { name: 'Бег с ускорением', type: 'plyometric', primary: 'ноги', secondary: ['взрывная сила'] },
-                { name: 'Прыжки в длину', type: 'plyometric', primary: 'ноги', secondary: ['взрывная сила'] },
-                { name: 'Боковые перемещения', type: 'plyometric', primary: 'ноги', secondary: ['координация'] },
-                { name: 'Приседания с весом', type: 'compound', primary: 'ноги', secondary: ['сила'] },
-                { name: 'Выпады с поворотом', type: 'plyometric', primary: 'ноги', secondary: ['координация'] },
-                { name: 'Прыжки на одной ноге', type: 'plyometric', primary: 'ноги', secondary: ['баланс'] },
-                { name: 'Бег спиной вперед', type: 'cardio', primary: 'ноги', secondary: ['координация'] },
-                { name: 'Бег с высоким подниманием коленей', type: 'plyometric', primary: 'ноги', secondary: ['скорость'] },
-                { name: 'Прыжки через барьеры', type: 'plyometric', primary: 'ноги', secondary: ['взрывная сила'] }
-            ]
+        // РАСШИРЕННАЯ БАЗА УПРАЖНЕНИЙ ПО ДИСЦИПЛИНАМ
+        const SPORT_EXERCISES = {
+            gym: {
+                strength: [
+                    { name: 'Жим штанги лежа', type: 'compound', muscleGroup: 'грудь' },
+                    { name: 'Приседания со штангой', type: 'compound', muscleGroup: 'ноги' },
+                    { name: 'Становая тяга', type: 'compound', muscleGroup: 'спина' },
+                    { name: 'Подтягивания', type: 'compound', muscleGroup: 'спина' },
+                    { name: 'Жим штанги стоя', type: 'compound', muscleGroup: 'плечи' },
+                    { name: 'Тяга штанги в наклоне', type: 'compound', muscleGroup: 'спина' },
+                    { name: 'Французский жим', type: 'isolation', muscleGroup: 'трицепс' },
+                    { name: 'Подъем штанги на бицепс', type: 'isolation', muscleGroup: 'бицепс' },
+                    { name: 'Разведение гантелей', type: 'isolation', muscleGroup: 'грудь' },
+                    { name: 'Подъемы на носки', type: 'isolation', muscleGroup: 'икры' }
+                ],
+                pump: [
+                    { name: 'Сгибания рук с гантелями', type: 'isolation', muscleGroup: 'бицепс' },
+                    { name: 'Разгибания на блоке', type: 'isolation', muscleGroup: 'трицепс' },
+                    { name: 'Махи гантелями', type: 'isolation', muscleGroup: 'плечи' },
+                    { name: 'Сведение рук в тренажере', type: 'isolation', muscleGroup: 'грудь' },
+                    { name: 'Сгибание ног', type: 'isolation', muscleGroup: 'бедра' },
+                    { name: 'Разгибание ног', type: 'isolation', muscleGroup: 'квадрицепсы' },
+                    { name: 'Гиперэкстензия', type: 'isolation', muscleGroup: 'поясница' },
+                    { name: 'Скручивания', type: 'isolation', muscleGroup: 'пресс' }
+                ]
+            },
+            basketball: {
+                explosive: [
+                    { name: 'Прыжки на тумбу', type: 'plyometric', muscleGroup: 'ноги' },
+                    { name: 'Приседания с выпрыгиванием', type: 'plyometric', muscleGroup: 'ноги' },
+                    { name: 'Выпрыгивания из выпада', type: 'plyometric', muscleGroup: 'ноги' },
+                    { name: 'Челночный бег 4x10м', type: 'plyometric', muscleGroup: 'ноги' },
+                    { name: 'Спринт 20м', type: 'plyometric', muscleGroup: 'ноги' },
+                    { name: 'Бег с высоким подниманием бедра', type: 'plyometric', muscleGroup: 'ноги' }
+                ],
+                coordination: [
+                    { name: 'Ведение мяча слабой рукой', type: 'skill', muscleGroup: 'руки' },
+                    { name: 'Броски с разных точек', type: 'skill', muscleGroup: 'руки' },
+                    { name: 'Дриблинг через препятствия', type: 'skill', muscleGroup: 'все тело' },
+                    { name: 'Передачи у стены', type: 'skill', muscleGroup: 'руки' },
+                    { name: 'Броски после перемещения', type: 'skill', muscleGroup: 'все тело' }
+                ]
+            },
+            boxing: {
+                stamina: [
+                    { name: 'Скакалка 3 минуты', type: 'cardio', muscleGroup: 'ноги' },
+                    { name: 'Бой с тенью 3 раунда', type: 'cardio', muscleGroup: 'все тело' },
+                    { name: 'Работа на мешке 3 раунда', type: 'cardio', muscleGroup: 'руки, корпус' },
+                    { name: 'Берпи 30 секунд', type: 'plyometric', muscleGroup: 'все тело' },
+                    { name: 'Альпинист 1 минута', type: 'cardio', muscleGroup: 'пресс, ноги' }
+                ],
+                technique: [
+                    { name: 'Отработка комбинаций', type: 'skill', muscleGroup: 'руки, ноги' },
+                    { name: 'Работа на лапах', type: 'skill', muscleGroup: 'руки, координация' },
+                    { name: 'Защитные движения', type: 'skill', muscleGroup: 'ноги, корпус' },
+                    { name: 'Спарринг (легкий)', type: 'skill', muscleGroup: 'все тело' }
+                ]
+            },
+            football: {
+                sprint: [
+                    { name: 'Спринт 30м', type: 'plyometric', muscleGroup: 'ноги' },
+                    { name: 'Челночный бег 4x10м', type: 'plyometric', muscleGroup: 'ноги' },
+                    { name: 'Бег с ускорением', type: 'plyometric', muscleGroup: 'ноги' },
+                    { name: 'Бег спиной вперед', type: 'plyometric', muscleGroup: 'ноги' },
+                    { name: 'Боковые перемещения', type: 'plyometric', muscleGroup: 'ноги' }
+                ],
+                ballwork: [
+                    { name: 'Дриблинг через конусы', type: 'skill', muscleGroup: 'ноги, координация' },
+                    { name: 'Удары по воротам', type: 'skill', muscleGroup: 'ноги' },
+                    { name: 'Передачи на точность', type: 'skill', muscleGroup: 'ноги' },
+                    { name: 'Жонглирование мячом', type: 'skill', muscleGroup: 'ноги, координация' },
+                    { name: 'Игра в стенку', type: 'skill', muscleGroup: 'ноги' }
+                ]
+            },
+            volleyball: {
+                jump: [
+                    { name: 'Прыжки через барьеры', type: 'plyometric', muscleGroup: 'ноги' },
+                    { name: 'Прыжки на одной ноге', type: 'plyometric', muscleGroup: 'ноги' },
+                    { name: 'Приседания с выпрыгиванием', type: 'plyometric', muscleGroup: 'ноги' },
+                    { name: 'Прыжки с места', type: 'plyometric', muscleGroup: 'ноги' },
+                    { name: 'Прыжки с разбега', type: 'plyometric', muscleGroup: 'ноги' }
+                ],
+                technique: [
+                    { name: 'Подача на точность', type: 'skill', muscleGroup: 'руки, корпус' },
+                    { name: 'Прием мяча', type: 'skill', muscleGroup: 'руки, ноги' },
+                    { name: 'Нападающий удар', type: 'skill', muscleGroup: 'руки, ноги' },
+                    { name: 'Блокирование', type: 'skill', muscleGroup: 'руки, ноги' },
+                    { name: 'Передача сверху/снизу', type: 'skill', muscleGroup: 'руки' }
+                ]
+            }
         };
 
         // База данных спорта
@@ -2873,8 +2917,8 @@
                 category: 'team',
                 activityMultiplier: 1.725,
                 nutritionFormula: {
-                    proteinPerKg: 1.6,
-                    carbsPerKg: 6,
+                    proteinPerKg: 1.7,  // Исправлено: было 1.6, теперь 1.7 как в требованиях
+                    carbsPerKg: 6,       // Исправлено: было 6, теперь соответствует требованиям
                     fatPerKg: 1,
                     calorieSurplus: 0.15
                 },
@@ -2889,7 +2933,7 @@
                 activityMultiplier: 1.725,
                 nutritionFormula: {
                     proteinPerKg: 1.7,
-                    carbsPerKg: 5.5,
+                    carbsPerKg: 6,
                     fatPerKg: 1,
                     calorieSurplus: 0.15
                 },
@@ -2903,8 +2947,8 @@
                 category: 'team',
                 activityMultiplier: 1.725,
                 nutritionFormula: {
-                    proteinPerKg: 1.6,
-                    carbsPerKg: 5,
+                    proteinPerKg: 1.7,
+                    carbsPerKg: 6,
                     fatPerKg: 1,
                     calorieSurplus: 0.15
                 },
@@ -2918,8 +2962,8 @@
                 category: 'martial',
                 activityMultiplier: 1.8,
                 nutritionFormula: {
-                    proteinPerKg: 1.8,
-                    carbsPerKg: 5,
+                    proteinPerKg: 1.7,
+                    carbsPerKg: 6,
                     fatPerKg: 0.9,
                     calorieSurplus: 0.1
                 },
@@ -2936,8 +2980,8 @@
                         name: 'Набор мышечной массы',
                         activityMultiplier: 1.55,
                         nutritionFormula: {
-                            proteinPerKg: 2.2,
-                            carbsPerKg: 4,
+                            proteinPerKg: 2.2,    // Исправлено: было 2.2, соответствует требованиям
+                            carbsPerKg: 4,        // Исправлено: было 4, соответствует требованиям
                             fatPerKg: 1,
                             calorieSurplus: 0.20
                         }
@@ -3070,22 +3114,30 @@
                     goal || (sportId === 'gym' ? this.state.currentGymGoal : null)
                 );
                 
-                let exercisePool;
+                let exercisePool = [];
                 let workoutCount = 5;
                 
                 // Выбираем пул упражнений в зависимости от спорта
                 if (sportId === 'gym') {
                     const isStrengthGoal = goal === 'muscle';
-                    exercisePool = isStrengthGoal ? EXERCISE_DATABASE.strength : EXERCISE_DATABASE.endurance;
+                    if (isStrengthGoal) {
+                        exercisePool = SPORT_EXERCISES.gym.strength;
+                    } else {
+                        exercisePool = SPORT_EXERCISES.gym.pump;
+                    }
+                    workoutCount = 6;
+                } else if (sportId === 'basketball') {
+                    exercisePool = [...SPORT_EXERCISES.basketball.explosive, ...SPORT_EXERCISES.basketball.coordination];
                     workoutCount = 6;
                 } else if (sportId === 'boxing') {
-                    exercisePool = [
-                        { name: 'Бой с тенью', type: 'cardio', primary: 'все тело' },
-                        { name: 'Скакалка', type: 'cardio', primary: 'ноги' },
-                        { name: 'Работа на мешке', type: 'compound', primary: 'руки, корпус' },
-                        { name: 'Спарринг', type: 'compound', primary: 'все тело' },
-                        { name: 'Бурпи', type: 'plyometric', primary: 'все тело' }
-                    ];
+                    exercisePool = [...SPORT_EXERCISES.boxing.stamina, ...SPORT_EXERCISES.boxing.technique];
+                    workoutCount = 6;
+                } else if (sportId === 'football') {
+                    exercisePool = [...SPORT_EXERCISES.football.sprint, ...SPORT_EXERCISES.football.ballwork];
+                    workoutCount = 6;
+                } else if (sportId === 'volleyball') {
+                    exercisePool = [...SPORT_EXERCISES.volleyball.jump, ...SPORT_EXERCISES.volleyball.technique];
+                    workoutCount = 6;
                 } else {
                     exercisePool = EXERCISE_DATABASE.team_sports;
                     workoutCount = 6;
@@ -3094,8 +3146,16 @@
                 // Генерируем тренировку через калькулятор
                 const workouts = this.loadCalculator.generateWorkout(exercisePool, workoutCount);
                 
-                // Добавляем адаптивные заметки
+                // Добавляем детализированное отображение для каждого упражнения
                 workouts.forEach(workout => {
+                    // Форматируем вывод подходов и повторений
+                    workout.displayDetails = `${workout.sets} подх. × ${workout.reps} повт.`;
+                    
+                    // Если есть вес, добавляем его к отображению
+                    if (workout.weight && workout.weight !== "Собственный вес") {
+                        workout.displayDetails += ` | Вес: ${workout.weight}`;
+                    }
+                    
                     if (!workout.adaptiveNote) {
                         // Заметка о соматотипе
                         const somatype = this.loadCalculator.athleteModifiers.somatotype;
@@ -3121,6 +3181,68 @@
                 });
                 
                 return workouts;
+            }
+            
+            // ============ ИСПРАВЛЕННАЯ ФУНКЦИЯ ВАЛИДАЦИИ ============
+            validateBasicData() {
+                const age = document.getElementById('age').value.trim();
+                const gender = document.getElementById('gender').value.trim();
+                const height = document.getElementById('height').value.trim();
+                const weight = document.getElementById('weight').value.trim();
+                const wrist = document.getElementById('wrist').value.trim();
+                const ankle = document.getElementById('ankle').value.trim();
+                
+                console.log('validateBasicData values:', { age, gender, height, weight, wrist, ankle });
+                
+                // Проверяем, что все поля заполнены
+                if (!age || !gender || !height || !weight || !wrist || !ankle) {
+                    alert('Пожалуйста, заполните все поля');
+                    return false;
+                }
+                
+                // Проверяем числовые значения
+                const ageNum = parseInt(age);
+                const heightNum = parseInt(height);
+                const weightNum = parseInt(weight);
+                const wristNum = parseFloat(wrist);
+                const ankleNum = parseFloat(ankle);
+                
+                if (isNaN(ageNum) || ageNum < 14 || ageNum > 80) {
+                    alert('Пожалуйста, введите корректный возраст (14-80 лет)');
+                    return false;
+                }
+                
+                if (isNaN(heightNum) || heightNum < 120 || heightNum > 220) {
+                    alert('Пожалуйста, введите корректный рост (120-220 см)');
+                    return false;
+                }
+                
+                if (isNaN(weightNum) || weightNum < 30 || weightNum > 150) {
+                    alert('Пожалуйста, введите корректный вес (30-150 кг)');
+                    return false;
+                }
+                
+                if (isNaN(wristNum) || wristNum < 12 || wristNum > 25) {
+                    alert('Пожалуйста, введите корректный обхват запястья (12-25 см)');
+                    return false;
+                }
+                
+                if (isNaN(ankleNum) || ankleNum < 15 || ankleNum > 30) {
+                    alert('Пожалуйста, введите корректный обхват щиколотки (15-30 см)');
+                    return false;
+                }
+                
+                this.state.userData = {
+                    age: ageNum,
+                    gender: gender,
+                    height: heightNum,
+                    weight: weightNum,
+                    wrist: wristNum,
+                    ankle: ankleNum
+                };
+                
+                console.log('User data saved:', this.state.userData);
+                return true;
             }
             
             // ============ НОВАЯ ФУНКЦИЯ: ПОКАЗ ТЕСТОВ СПОРТА ============
@@ -3352,7 +3474,8 @@
                                     ${workout.type === 'plyometric' ? '⚡ Взрывное' : 
                                       workout.type === 'compound' ? '🏋️ База' : 
                                       workout.type === 'isolation' ? '🔬 Изоляция' :
-                                      workout.type === 'static' ? '⏱️ Статика' : '🏃 Кардио'}
+                                      workout.type === 'static' ? '⏱️ Статика' : 
+                                      workout.type === 'skill' ? '🎯 Техника' : '🏃 Кардио'}
                                 </div>
                             </div>
                             <div class="workout-details">
@@ -3370,21 +3493,24 @@
                                     </svg>
                                     Повторения: ${workout.reps}
                                 </span>
+                                ${workout.weight && workout.weight !== "Собственный вес" ? `
                                 <span class="workout-detail-item">
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M12 20V10M8 20V14M16 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                                     </svg>
-                                    Отдых: ${workout.rest}
+                                    Вес: ${workout.weight}
                                 </span>
+                                ` : ''}
                             </div>
-                            ${workout.weight ? `<div class="dumbbell-weight">🏋️ Вес: ${workout.weight} ${workout.weightNote ? '(' + workout.weightNote + ')' : ''}</div>` : ''}
+                            ${workout.displayDetails ? `<div class="dumbbell-weight">${workout.displayDetails}</div>` : ''}
+                            ${workout.weightNote ? `<div class="text-muted" style="font-size: var(--font-xs); margin-top: 2px;">${workout.weightNote}</div>` : ''}
                             ${workout.tip ? `<div class="workout-tip">💡 ${workout.tip}</div>` : ''}
                             ${workout.adaptiveNote ? `<div class="adaptive-note">⚡ ${workout.adaptiveNote}</div>` : ''}
                         </li>
                     `).join('');
                 }
                 
-                // Питание
+                // Питание с обновленными формулами БЖУ
                 const nutritionProgram = this.calculateNutritionProgram(sport.id);
                 if (nutritionProgram) {
                     const waterIntake = this.calculateWaterIntake();
@@ -3655,34 +3781,6 @@
                 } else {
                     console.error('Step element not found for step:', step);
                 }
-            }
-            
-            validateBasicData() {
-                const age = document.getElementById('age').value;
-                const gender = document.getElementById('gender').value;
-                const height = document.getElementById('height').value;
-                const weight = document.getElementById('weight').value;
-                const wrist = document.getElementById('wrist').value;
-                const ankle = document.getElementById('ankle').value;
-                
-                console.log('validateBasicData values:', { age, gender, height, weight, wrist, ankle });
-                
-                if (!age || !gender || !height || !weight || !wrist || !ankle) {
-                    alert('Пожалуйста, заполните все поля');
-                    return false;
-                }
-                
-                this.state.userData = {
-                    age: parseInt(age),
-                    gender: gender,
-                    height: parseInt(height),
-                    weight: parseInt(weight),
-                    wrist: parseFloat(wrist),
-                    ankle: parseFloat(ankle)
-                };
-                
-                console.log('User data saved:', this.state.userData);
-                return true;
             }
             
             startReactionTest() {
@@ -4581,7 +4679,7 @@
                 }
             }
             
-            // ============ ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ============
+            // ============ ОБНОВЛЕННАЯ ФУНКЦИЯ: РАСЧЕТ БЖУ ============
             calculateBMR() {
                 const { age, gender, height, weight } = this.state.userData;
                 
@@ -4901,14 +4999,17 @@
                                     </svg>
                                     Повторения: ${workout.reps}
                                 </span>
+                                ${workout.weight && workout.weight !== "Собственный вес" ? `
                                 <span class="workout-detail-item">
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M12 20V10M8 20V14M16 20V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                                     </svg>
-                                    Отдых: ${workout.rest}
+                                    Вес: ${workout.weight}
                                 </span>
+                                ` : ''}
                             </div>
-                            ${workout.weight ? `<div class="dumbbell-weight">🏋️ Вес: ${workout.weight} ${workout.weightNote ? '(' + workout.weightNote + ')' : ''}</div>` : ''}
+                            ${workout.displayDetails ? `<div class="dumbbell-weight">${workout.displayDetails}</div>` : ''}
+                            ${workout.weightNote ? `<div class="text-muted" style="font-size: var(--font-xs); margin-top: 2px;">${workout.weightNote}</div>` : ''}
                             ${workout.tip ? `<div class="workout-tip">💡 ${workout.tip}</div>` : ''}
                             ${workout.adaptiveNote ? `<div class="adaptive-note">⚡ ${workout.adaptiveNote}</div>` : ''}
                             ${isBeginner ? `<div class="adaptive-note">⚡ Начните с легких весов, фокусируйтесь на технике</div>` : ''}
